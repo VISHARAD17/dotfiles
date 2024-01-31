@@ -86,7 +86,7 @@ keymap('n', '<leader>p', ':Lazy<CR>', opts)
 keymap('n', '<leader>k', ':bd<CR>', opts) -- kill current buffer
 
 --toggleterm
-keymap('n', '<leader>t', '<cmd>ToggleTerm direction=float<cr>', opts) -- floating terminal ( favourite )
+keymap('n', '<leader>t', '<cmd>ToggleTerm direction=float<cr>', opts) -- floating terminal
 
 -- gitsigns
 keymap('n', '<leader>gf', "<cmd>Gitsigns diffthis HEAD<cr>", opts) -- show difference

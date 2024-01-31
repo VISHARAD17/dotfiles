@@ -11,7 +11,7 @@ Plugins :
 - mason-config 
 - nvim-cmp
 - colorizer
-- triptchy
+- triptchy ( file viewer )
 
 
 ``will be updated``
