@@ -62,38 +62,43 @@ keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
 keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 ------------------------------- keymaps for plugins ----------------------
+-- #TODO:need to write in whichkey
 
 -- nvim tree
-keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
-
-
--- telescope
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {}) -- find files
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) -- find text 
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-
--- lsp
-vim.keymap.set('n', '<leader>lk', vim.lsp.buf.hover, {}) -- show information
-vim.keymap.set('n', '<leader>ld', vim.lsp.buf.declaration, {}) -- show information
-vim.keymap.set('n', '<leader>lg', vim.lsp.buf.definition, {}) -- show information
-vim.keymap.set('n', '<leader>ll', vim.lsp.buf.signature_help, {})
---lazy
-keymap('n', '<leader>p', ':Lazy<CR>', opts)
-
---buffer
-keymap('n', '<leader>k', ':bd<CR>', opts) -- kill current buffer
-
---toggleterm
-keymap('n', '<leader>t', '<cmd>ToggleTerm direction=float<cr>', opts) -- floating terminal
-
--- gitsigns
-keymap('n', '<leader>gf', "<cmd>Gitsigns diffthis HEAD<cr>", opts) -- show difference
-
--- diagnostics
-keymap('n', '<leader>d', '<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>', opts)
-
-
--- file viewer ( triptchy )
-vim.keymap.set('n', '<leader>n', ':Triptych<CR>', { silent = true })
+-- keymap("n", "<leader>e", ":NvimTreeToggle<cr>", opts)
+--
+--
+-- -- telescope
+-- local builtin = require('telescope.builtin')
+-- vim.keymap.set('n', '<leader>ff', builtin.find_files, {}) -- find files
+-- vim.keymap.set('n', '<leader>fg', builtin.live_grep, {}) -- find text 
+-- vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+-- vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+--
+-- -- lsp
+-- vim.keymap.set('n', '<leader>lk', vim.lsp.buf.hover, {}) -- show information
+-- vim.keymap.set('n', '<leader>ld', vim.lsp.buf.declaration, {}) -- show information
+-- vim.keymap.set('n', '<leader>lg', vim.lsp.buf.definition, {}) -- show information
+-- vim.keymap.set('n', '<leader>ll', vim.lsp.buf.signature_help, {})
+-- --lazy
+-- keymap('n', '<leader>p', ':Lazy<CR>', opts)
+--
+-- --buffer
+-- keymap('n', '<leader>k', ':bd<CR>', opts) -- kill current buffer
+--
+-- --toggleterm
+-- keymap('n', '<leader>t', '<cmd>ToggleTerm direction=float<cr>', opts) -- floating terminal
+--
+-- -- gitsigns
+-- keymap('n', '<leader>gf', "<cmd>Gitsigns diffthis HEAD<cr>", opts) -- show difference
+--
+-- -- diagnostics
+-- keymap('n', '<leader>d', '<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>', opts)
+--
+--
+-- -- file viewer ( triptchy )
+-- vim.keymap.set('n', '<leader>n', ':Triptych<CR>', { silent = true })
+--
+-- -- horizontal scrolling
+-- vim.api.nvim_set_keymap('n', '<S-ScrollWheelLeft>', 'zH', {noremap = true})
+-- vim.api.nvim_set_keymap('n', '<S-ScrollWheelRight>', 'zL', {noremap = true})

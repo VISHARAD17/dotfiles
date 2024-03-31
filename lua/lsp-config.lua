@@ -1,5 +1,4 @@
 -- lsp zero config
-
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
@@ -76,6 +75,7 @@ lspconfig.rust_analyzer.setup({
         },
     },
 })
+
 
 -- (Optional) Configure lua language server for neovim
 lsp.nvim_workspace()
