@@ -14,4 +14,4 @@ Plugins :
 - triptchy ( file viewer )
 
 
-``will be updated``
+`Currently using nvim as my primary editor`
