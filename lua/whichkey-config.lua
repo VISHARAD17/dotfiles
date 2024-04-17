@@ -118,19 +118,15 @@ local mappings = {
 
 
     -- Language Support
-    l = {
+   l = {
         name = "LSP",
-        k = { "<cmd> lua vim.lsp.buf.hover<cr>", "Show information"},
-        d = { "<cmd> lua vim.lsp.buf.declaration<cr>", "show declaration"},
-        g = {"<cmd> lua vim.lua.buf.definition<cr>", "go to definition"},
-        a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
-        i = { "<cmd>LspInfo<cr>", "Info" },
-        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+        D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "declaration"}, -- open lsp declaration
+        d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "definition or source"}, -- go to defination
+        r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }, -- rename the variable
         s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
-        S = {
-            "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>",
-            "Workspace Symbols",
-        },
+        i = { "<cmd>LspInfo<cr>", "Info" },
+        a = { "<cmd> lua vim.lsp.buf.code_action()<cr>", "Code action"}, -- show available code actions
+        K = { "<cmd> lua vim.lsp.buf.hover()<cr>", "show documentation"}, -- shows documentation in a floating window
     },
 
     -- Telescope
