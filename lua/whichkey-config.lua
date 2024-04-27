@@ -90,7 +90,7 @@ local mappings = {
     ["r"] = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Reformat Code" },
     ["w"] = { "<cmd>w!<CR>", "Save" }, -- Save current file
     ["d"] = { "<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>", "open diagnostic"}, -- open diagnostics in a floating window
-    ["n"] = {"<cmd> Triptych{silent = true}<cr>", "Open file Preview"},
+    ["n"] = {"<cmd>Triptych<cr>", "Open file Preview"},
 
 
     --Git
