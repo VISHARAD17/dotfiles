@@ -1,6 +1,6 @@
 #### Neovim config
 
-'Plugins' :
+`Plugins` :
 - Auto-pairs
 - auto tag completion
 - bigfiles
