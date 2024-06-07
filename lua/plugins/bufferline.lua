@@ -13,7 +13,9 @@ return {
                         filetype = 'NvimTree',
                         text = 'Files',
                         highlight = 'Directory',
-                        text_align = 'center'
+                        text_align = 'center',
+                        separator = true,
+                        padding = 1
                     },
                 },
                 diagnostics = 'nvim_lsp',

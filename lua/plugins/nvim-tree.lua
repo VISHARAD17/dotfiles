@@ -15,6 +15,15 @@ return {
             return
         end
 
+        require('nvim-web-devicons').setup({
+            default = true,
+            override = {
+                norg = {
+                    icon = 'file_norg',
+                },
+            },
+        })
+
         local tree_cb = nvim_tree_config.nvim_tree_callback
 
         nvim_tree.setup {

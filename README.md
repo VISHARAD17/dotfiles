@@ -1,17 +1,20 @@
 #### Neovim config
 
-Plugins :
-- telescope
+'Plugins' :
+- Auto-pairs
+- auto tag completion
+- bigfiles
 - bufferline
-- autotag
-- autopair 
-- lualine
-- lsp-zero
-- mason
-- mason-config 
-- nvim-cmp
 - colorizer
-- triptchy ( file viewer )
-
-
-`Currently using nvim as my primary editor`
+- colorscheme - darkplus from lunarvim repo
+- comment 
+- fold
+- gitsigns
+- lsp
+- lualine 
+- neoScroll
+- nvim-tree
+- scrollbar
+- surround
+- telescope
+- whichkey

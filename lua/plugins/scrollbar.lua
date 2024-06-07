@@ -33,7 +33,7 @@ return {
                     gui = nil,
                     color = nil,
                     cterm = nil,
-                    color_nr = nil, -- cterm
+                    color_nr = "grey", -- cterm
                     highlight = "Search",
                 },
                 Error = {
