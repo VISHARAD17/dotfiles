@@ -123,6 +123,7 @@ local mappings = {
         D = { "<cmd>lua vim.lsp.buf.declaration()<cr>", "declaration"}, -- open lsp declaration
         d = { "<cmd>lua vim.lsp.buf.definition()<cr>", "definition or source"}, -- go to defination
         r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" }, -- rename the variable
+        g = {"<cmd>lua vim.lsp.buf.references()<cr>", "Go to references"}, -- go to reference
         s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
         i = { "<cmd>LspInfo<cr>", "Info" },
         a = { "<cmd> lua vim.lsp.buf.code_action()<cr>", "Code action"}, -- show available code actions
@@ -137,7 +138,8 @@ local mappings = {
         t = { "<cmd>Telescope live_grep <cr>", "Find Text Pattern" },
         r = { "<cmd>Telescope oldfiles<cr>", "Recent Files" },
         h = { "<cmd> Telescope help_tags<cr>", "Help tags"},
-        k = { "<cmd> Telescope keymaps<cr>", "Keymaps"}
+        k = { "<cmd> Telescope keymaps<cr>", "Keymaps"},
+        g = { "<cmd> lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>", 'search in current file'},
     },
 
     -- --ToggleTerm

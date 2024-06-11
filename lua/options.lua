@@ -54,7 +54,6 @@ vim.g.markdown_recommended_style = 0
 opt.maxmempattern = 5000
 
 
-
 -- -- Enable horizontal scrolling
 -- opt.sidescrolloff = 5 -- Adjust the number of columns to keep visible on the sides
 -- opt.scrolloff = 5 -- Adjust the number of lines to keep visible on the top and bottom

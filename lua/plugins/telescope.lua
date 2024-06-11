@@ -4,7 +4,6 @@ return {
     config = function ()
         require('telescope').setup({
             defaults = {
-
             },
             pickers = {
                 find_files = {

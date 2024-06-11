@@ -16,6 +16,10 @@ keymap("", "<Space>", "<Nop>", opts)
 --   term_mode = "t",
 --   command_mode = "c",
 
+-- current buffer/window scrolling
+keymap("n", "<C-d>", "<C-d>zz", opts) -- down
+keymap("n", "<C-u>", "<C-u>zz", opts) -- up
+
 -- Better window navigation
 keymap("n", "<C-h>", "<C-w>h", opts) -- left window
 keymap("n", "<C-k>", "<C-w>k", opts) -- up window
