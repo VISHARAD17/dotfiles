@@ -39,16 +39,15 @@ keymap("n", "<s-tab>", ":bprevious<cr>", opts) -- Previous tab
 keymap("n", "<leader>h", ":nohlsearch<cr>", opts) -- No highlight search
 
 -- move text up and down
-keymap("n", "<a-j>", "<esc>:m .+1<cr>==gi", opts) -- Alt-j 
-keymap("n", "<a-k>", "<esc>:m .-2<cr>==gi", opts) -- Alt-k
+-- keymap("n", "<a-j>", "<esc>:m .+1<cr>==gi", opts) -- Alt-j in windows
+-- keymap("n", "<a-k>", "<esc>:m .-2<cr>==gi", opts) -- Alt-k in windows
 
 
--- visual --
+                    ----- visual --
 -- stay in indent mode
 keymap("v", "<", "<gv", opts) -- Right Indentation
 keymap("v", ">", ">gv", opts) -- Left Indentation
 
--- Visual Block --
 -- move text up and down
 keymap("v", "<S-j>", ":m .+1<cr>==", opts)
 keymap("v", "<S-k>", ":m .-2<cr>==", opts)
