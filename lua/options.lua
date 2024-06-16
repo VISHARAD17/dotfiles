@@ -47,6 +47,7 @@ opt.wrap = false -- Disable line wrap
 opt.linebreak = true
 opt.list = false
 
+
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
 

@@ -1,32 +1,16 @@
 return {
     'nvim-tree/nvim-tree.lua',
-    lazy = true,
     dependencies = {
         'nvim-tree/nvim-web-devicons',
     },
     config = function()
-        local status_ok, nvim_tree = pcall(require, "nvim-tree")
-        if not status_ok then
-            return
-        end
-
-        local config_status_ok, nvim_tree_config = pcall(require, "nvim-tree.config")
-        if not config_status_ok then
-            return
-        end
 
         require('nvim-web-devicons').setup({
             default = true,
-            override = {
-                norg = {
-                    icon = 'file_norg',
-                },
-            },
         })
 
-        local tree_cb = nvim_tree_config.nvim_tree_callback
 
-        nvim_tree.setup {
+        require("nvim-tree").setup({
             update_focused_file = {
                 enable = true,
                 update_cwd = true,
@@ -62,7 +46,7 @@ return {
             },
             diagnostics = {
                 enable = true,
-                show_on_dirs = true,
+                show_on_dirs = false,
                 icons = {
                     hint = "",
                     info = "",
@@ -73,15 +57,8 @@ return {
             view = {
                 width = 30,
                 side = "left",
-                mappings = {
-                    list = {
-                        { key = { "l", "<CR>", "o" }, cb = tree_cb "edit" },
-                        { key = "h", cb = tree_cb "close_node" },
-                        { key = "v", cb = tree_cb "vsplit" },
-                    },
-                },
             },
-        }
+        })
 
     end
 }
