@@ -47,6 +47,8 @@ opt.wrap = false -- Disable line wrap
 opt.linebreak = true
 opt.list = false
 
+opt.clipboard = { "unnamed", "unnamedplus" } -- Use system clipboard.
+
 
 -- Fix markdown indentation settings
 vim.g.markdown_recommended_style = 0
