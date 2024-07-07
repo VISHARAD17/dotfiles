@@ -6,6 +6,7 @@ if not status_ok then
     return
 end
 
+
 local setup = {
     plugins = {
         marks = true, -- shows a list of your marks on ' and `
@@ -91,7 +92,6 @@ local mappings = {
     ["w"] = { "<cmd>w!<CR>", "Save" }, -- Save current file
     ["d"] = { "<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>", "open diagnostic"}, -- open diagnostics in a floating window
     ["n"] = {"<cmd>Triptych<cr>", "Open file Preview"},
-
 
     --Git
     g = {
