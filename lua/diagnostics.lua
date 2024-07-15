@@ -6,7 +6,7 @@ vim.diagnostic.config({
     severity_sort = true,
     float = {
         source = "always",
-    }
+    },
 })
 -- Show line diagnostics automatically in hover window
 -- vim.o.updatetime = 250
