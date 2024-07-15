@@ -84,22 +84,19 @@ local opts = {
 
 local mappings = {
 
-    ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer" }, -- File Explorer
-    ["k"] = { "<cmd>bdelete!<CR>", "Kill Buffer" },  -- Close current file
-    ["p"] = { "<cmd>Lazy<CR>", "Plugin Manager" }, -- Invoking plugin manager
-    ["q"] = { "<cmd>wqall!<CR>", "Quit" }, -- Quit Neovim after saving the file
-    ["r"] = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Reformat Code" },
-    ["w"] = { "<cmd>w!<CR>", "Save" }, -- Save current file
-    ["d"] = { "<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>", "open diagnostic"}, -- open diagnostics in a floating window
-    ["n"] = {"<cmd>Triptych<cr>", "Open file Preview"},
+    ["e"] = { "<cmd>NvimTreeToggle<cr>", desc = "Explorer", nowait=true, remap=false }, -- File Explorer
+    ["k"] = { "<cmd>bdelete!<CR>", desc = "Kill Buffer" },  -- Close current file
+    ["p"] = { "<cmd>Lazy<CR>", desc = "Plugin Manager" }, -- Invoking plugin manager
+    ["q"] = { "<cmd>wqall!<CR>", desc = "Quit" }, -- Quit Neovim after saving the file
+    ["r"] = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", desc ="Reformat Code" },
+    ["w"] = { "<cmd>w!<CR>", desc = "Save" }, -- Save current file
+    ["d"] = { "<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>", desc = "open diagnostic",remap=false}, -- open diagnostics in a floating window
+    ["n"] = {"<cmd>Triptych<cr>", desc = "Open file Preview"},
 
     --Git
     g = {
         name = "Git",
-        d = {
-            "<cmd>Gitsigns diffthis HEAD<cr>",
-            "Diff",
-        },
+        d = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff"},
         j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
         k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
         l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -107,15 +104,11 @@ local mappings = {
         r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
         R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
         s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-        u = {
-            "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-            "Undo Stage Hunk",
-        },
+        u = { "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk"},
         o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
         b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
         c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
     },
-
 
     -- Language Support
    l = {
