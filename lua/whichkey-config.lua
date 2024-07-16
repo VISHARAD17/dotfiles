@@ -134,7 +134,7 @@ local mappings = {
         g = { "<cmd> lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>", 'search in current file'},
     },
 
-    -- --ToggleTerm
+    -- --ToggleTerm (uninstalled)
     -- t = {
     --     name = "Terminal",
     --     n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },

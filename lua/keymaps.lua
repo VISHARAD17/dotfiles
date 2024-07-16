@@ -39,8 +39,8 @@ keymap("n", "<s-tab>", ":bprevious<cr>", opts) -- Previous tab
 keymap("n", "<leader>h", ":nohlsearch<cr>", opts) -- No highlight search
 
 -- move text up and down
--- keymap("n", "<a-j>", "<esc>:m .+1<cr>==gi", opts) -- Alt-j in windows
--- keymap("n", "<a-k>", "<esc>:m .-2<cr>==gi", opts) -- Alt-k in windows
+-- keymap("n", "<a-j>", "<esc>:m .+1<cr>==gi", opts) -- Alt-j in windows only
+-- keymap("n", "<a-k>", "<esc>:m .-2<cr>==gi", opts) -- Alt-k in windows only
 
 
                     ----- visual --
