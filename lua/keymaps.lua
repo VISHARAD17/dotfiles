@@ -1,20 +1,16 @@
 local opts = { noremap = true, silent = true }
 
-local term_opts = { silent = true }
-
--- Shorten function name
 local keymap = vim.api.nvim_set_keymap
 
+local function setOpts(desc)
+    return {
+        noremap = true,
+        silent = true,
+        desc = desc
+    }
+end
 --Remap space as leader key
 keymap("", "<Space>", "<Nop>", opts)
-
--- Modes
---   normal_mode = "n",
---   insert_mode = "i",
---   visual_mode = "v",
---   visual_block_mode = "x",
---   term_mode = "t",
---   command_mode = "c",
 
 -- current buffer/window scrolling
 keymap("n", "<C-d>", "<C-d>zz", opts) -- down
@@ -26,11 +22,11 @@ keymap("n", "<C-k>", "<C-w>k", opts) -- up window
 keymap("n", "<C-j>", "<C-w>j", opts) -- down window
 keymap("n", "<C-l>", "<C-w>l", opts) -- right window
 
--- Resize with arrows when using multiple windows
-keymap("n", "<C-Up>", ":resize -2<CR>", opts)
-keymap("n", "<c-down>", ":resize +2<cr>", opts)
-keymap("n", "<c-right>", ":vertical resize -2<cr>", opts)
-keymap("n", "<c-left>", ":vertical resize +2<cr>", opts)
+-- Resize with arrows when using multiple windows ( does not work in mac)
+-- keymap("n", "<C-Up>", ":resize -2<CR>", opts)
+-- keymap("n", "<c-down>", ":resize +2<cr>", opts)
+-- keymap("n", "<c-right>", ":vertical resize -2<cr>", opts)
+-- keymap("n", "<c-left>", ":vertical resize +2<cr>", opts)
 
 
 -- navigate buffers
@@ -43,7 +39,7 @@ keymap("n", "<leader>h", ":nohlsearch<cr>", opts) -- No highlight search
 -- keymap("n", "<a-k>", "<esc>:m .-2<cr>==gi", opts) -- Alt-k in windows only
 
 
-                    ----- visual --
+----- visual --
 -- stay in indent mode
 keymap("v", "<", "<gv", opts) -- Right Indentation
 keymap("v", ">", ">gv", opts) -- Left Indentation
@@ -52,14 +48,52 @@ keymap("v", ">", ">gv", opts) -- Left Indentation
 keymap("v", "<S-j>", ":m .+1<cr>==", opts)
 keymap("v", "<S-k>", ":m .-2<cr>==", opts)
 
-    --Terminal --
-keymap("x", "J", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "K", ":move '<-2<CR>gv-gv", opts)
-keymap("x", "<A-j>", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "<A-k>", ":move '<-2<CR>gv-gv", opts)
+--------------------------------- KEYMAPS for plugins ---------------------------------------------
 
---Better terminal navigation
-keymap("t", "<C-h>", "<C-\\><C-N><C-w>h", term_opts)
-keymap("t", "<C-j>", "<C-\\><C-N><C-w>j", term_opts)
-keymap("t", "<C-k>", "<C-\\><C-N><C-w>k", term_opts)
-keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
+keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', setOpts("File Explorer"))
+keymap('n', '<leader>k', '<cmd>bdelete!<CR>', setOpts("Kill Buffer"))
+keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
+
+-- telescope
+keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", setOpts("find files"))
+keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<CR>", setOpts("search text"))
+keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
+keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
+
+-- diagnostics
+keymap("n",'<leader>d', ":lua vim.diagnostic.open_float(nil, {focus=false})<cr>", setOpts("open diagnostics"))
+
+-- Git mappings
+vim.api.nvim_set_keymap('n', '<leader>gd', '<cmd>Gitsigns diffthis HEAD<CR>', setOpts("Diff"))
+vim.api.nvim_set_keymap('n', '<leader>gj', '<cmd>lua require "gitsigns".next_hunk()<CR>', setOpts("Next Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gk', '<cmd>lua require "gitsigns".prev_hunk()<CR>', setOpts("Prev Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gl', '<cmd>lua require "gitsigns".blame_line()<CR>', setOpts("Blame"))
+vim.api.nvim_set_keymap('n', '<leader>gp', '<cmd>lua require "gitsigns".preview_hunk()<CR>', setOpts("Preview Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gr', '<cmd>lua require "gitsigns".reset_hunk()<CR>', setOpts("Reset Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gR', '<cmd>lua require "gitsigns".reset_buffer()<CR>', setOpts("Reset Buffer"))
+vim.api.nvim_set_keymap('n', '<leader>gs', '<cmd>lua require "gitsigns".stage_hunk()<CR>', setOpts("Stage Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gu', '<cmd>lua require "gitsigns".undo_stage_hunk()<CR>', setOpts("Undo Stage Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>go', '<cmd>Telescope git_status<CR>', setOpts("Open changed file"))
+vim.api.nvim_set_keymap('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', setOpts("Checkout branch"))
+vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Telescope git_commits<CR>', setOpts("Checkout commit"))
+
+-- LSP mappings
+vim.api.nvim_set_keymap('n', '<leader>lD', '<cmd>lua vim.lsp.buf.declaration()<CR>', setOpts("Declaration"))
+vim.api.nvim_set_keymap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', setOpts("Definition or source"))
+vim.api.nvim_set_keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', setOpts("Rename"))
+vim.api.nvim_set_keymap('n', '<leader>lg', '<cmd>lua vim.lsp.buf.references()<CR>', setOpts("Go to references"))
+vim.api.nvim_set_keymap('n', '<leader>ls', '<cmd>Telescope lsp_document_symbols<CR>', setOpts("Document Symbols"))
+vim.api.nvim_set_keymap('n', '<leader>li', '<cmd>LspInfo<CR>', setOpts("Info"))
+vim.api.nvim_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', setOpts("Code action"))
+vim.api.nvim_set_keymap('n', '<leader>lK', '<cmd>lua vim.lsp.buf.hover()<CR>', setOpts("Show documentation"))
+
+-- File Search mappings
+vim.api.nvim_set_keymap('n', '<leader>fc', '<cmd>Telescope colorscheme<CR>', setOpts("Colorscheme"))
+vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<CR>', setOpts("Find files"))
+vim.api.nvim_set_keymap('n', '<leader>ft', '<cmd>Telescope live_grep<CR>', setOpts("Find Text Pattern"))
+vim.api.nvim_set_keymap('n', '<leader>fr', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
+vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', setOpts("Help tags"))
+vim.api.nvim_set_keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
+vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', setOpts("Search in current file"))
+
+

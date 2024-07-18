@@ -87,10 +87,7 @@ local mappings = {
     ["e"] = { "<cmd>NvimTreeToggle<cr>", "Explorer"}, -- File Explorer
     ["k"] = { "<cmd>bdelete!<CR>","Kill Buffer" },  -- Close current file
     ["p"] = { "<cmd>Lazy<CR>","Plugin Manager" }, -- Invoking plugin manager
-    ["q"] = { "<cmd>wqall!<CR>","Quit" }, -- Quit Neovim after saving the file
-    ["r"] = { "<cmd>lua vim.lsp.buf.format{async=true}<cr>", "Reformat Code" },
-    ["w"] = { "<cmd>w!<CR>", "Save" }, -- Save current file
-    ["d"] = { "<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>","open diagnostic"}, -- open diagnostics in a floating window
+    ["d"] = {"<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>", "open diagnostics"}, -- open diagnostics
 
     --Git
     g = {
@@ -134,7 +131,7 @@ local mappings = {
         g = { "<cmd> lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>", 'search in current file'},
     },
 
-    -- --ToggleTerm (uninstalled)
+    -- --ToggleTerm
     -- t = {
     --     name = "Terminal",
     --     n = { "<cmd>lua _NODE_TOGGLE()<cr>", "Node" },
@@ -146,6 +143,5 @@ local mappings = {
     -- },
 
 }
-
 which_key.setup(setup)
 which_key.register(mappings, opts)

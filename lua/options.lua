@@ -65,4 +65,4 @@ opt.maxmempattern = 5000
 -- opt.scrollbind = true
 --
 -- vim.cmd [[autocmd vim.lsp.inlay_hints(0, true)]]
--- vim.api.nvim_create_autocmd(["vim.lsp.buf.inlay_hints(0, true)"])
+-- vim.api.nvim_create_autocmd('[vim.lsp.buf.inlay_hints(0, true)]')
