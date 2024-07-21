@@ -15,6 +15,11 @@ return {
                 enable = true,
                 update_cwd = true,
             },
+            filters = {
+                custom = {
+                    "^.git$",
+                },
+            },
             renderer = {
                 root_folder_modifier = ":t",
                 -- These icons are visible when you install web-devicons

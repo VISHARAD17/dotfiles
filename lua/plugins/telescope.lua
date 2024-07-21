@@ -7,7 +7,7 @@ return {
             },
             pickers = {
                 find_files = {
-                    find_command = { "rg", "--files", "--hidden", "--glob", "!.git", "--glob", "!node_modules" },
+                    find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*", "--glob", "!**/node_modules/*", "-u" },
                 },
             },
         })
