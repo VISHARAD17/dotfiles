@@ -96,4 +96,14 @@ vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', setOp
 vim.api.nvim_set_keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
 vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', setOpts("Search in current file"))
 
+-- Manage buffers
+vim.api.nvim_create_user_command('BufCurOnly', function()
+  vim.cmd('%bdelete')
+  vim.cmd('edit#')
+  vim.cmd('bdelete#')
+end, {})
 
+keymap('n', '<leader>ka', ':BufCurOnly<CR>', {
+  noremap = true,
+  silent = true
+})
