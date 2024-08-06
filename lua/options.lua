@@ -56,6 +56,8 @@ vim.g.markdown_recommended_style = 0
 -- for max horizontal text error maxmempattern
 opt.maxmempattern = 5000
 
+-- highlight cursor line
+vim.cmd([[highlight CursorLine cterm=NONE ctermbg=253 guibg=#2E2E2E]])
 
 -- -- Enable horizontal scrolling
 -- opt.sidescrolloff = 5 -- Adjust the number of columns to keep visible on the sides
@@ -66,3 +68,6 @@ opt.maxmempattern = 5000
 --
 -- vim.cmd [[autocmd vim.lsp.inlay_hints(0, true)]]
 -- vim.api.nvim_create_autocmd('[vim.lsp.buf.inlay_hints(0, true)]')
+
+
+

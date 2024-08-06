@@ -35,3 +35,4 @@ end
 
 -- Create a command to call the function
 vim.api.nvim_create_user_command('ClearMacros', clear_macros, {})
+vim.cmd([[highlight NvimTreeWinSeparator guifg=#FFFFFF guibg=NONE ctermfg=white ctermbg=NONE]])
