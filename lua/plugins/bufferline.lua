@@ -15,7 +15,7 @@ return {
                         highlight = 'Directory',
                         text_align = 'center',
                         separator = true,
-                        padding = 1
+                        padding = 0
                     },
                 },
                 diagnostics = 'nvim_lsp',
