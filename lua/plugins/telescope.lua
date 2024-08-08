@@ -5,11 +5,21 @@ return {
         require('telescope').setup({
             defaults = {
             },
+            -- pickers = {
+            --     find_files = {
+            --         find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*", "--glob", "!**/node_modules/*", "-u"},
+            --     },
+            -- },
             pickers = {
                 find_files = {
-                    find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*", "--glob", "!**/node_modules/*", "-u" },
+                    find_command = {
+                        "rg", "--files", "--hidden",
+                        "--glob", "!**/.git/*",
+                        "--glob", "!**/node_modules/*",
+                        "--glob", "!**/.next/*",
+                    },
                 },
-            },
+            }
         })
     end,
 }
