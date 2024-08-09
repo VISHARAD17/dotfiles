@@ -20,6 +20,7 @@ return {
             filters = {
                 custom = {
                     "^.git$",
+                    "node_modules",
                 },
             },
             git = {
