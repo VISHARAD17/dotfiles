@@ -61,7 +61,7 @@ keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>",
 keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
 
 -- diagnostics
-keymap("n",'<leader>d', ":lua vim.diagnostic.open_float(nil, {focus=false})<cr>", setOpts("open diagnostics"))
+keymap("n",'<leader>d', ":lua vim.diagnostic.open_float(nil, {focusable=true, scope='line'})<cr>", setOpts("open diagnostics"))
 
 -- Git mappings
 vim.api.nvim_set_keymap('n', '<leader>gd', '<cmd>Gitsigns diffthis HEAD<CR>', setOpts("Diff"))
