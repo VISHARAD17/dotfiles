@@ -10,6 +10,9 @@
 - comment 
 - fold
 - gitsigns
+- file-operations
+- markdownPreview
+- tailwindcss
 - lsp
 - lualine 
 - neoScroll
