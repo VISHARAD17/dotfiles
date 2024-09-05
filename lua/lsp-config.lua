@@ -4,21 +4,24 @@ lsp.preset('recommended')
 
 local mason = require('mason')
 mason.setup({
+    ui = {
+        border = "rounded",
+    },
+})
+
+
+require("mason").setup({
     ensure_installed = {
         "pyright",
-        "tsserver",
+        -- "tsserver", -- using a plugin for this
         "eslint",
         "lua_ls",
         "cssls",
         "rust-analyzer",
         "jsonls",
     },
-
-    ui = {
-        border = "rounded",
-    },
+    automatic_installation = true,
 })
-
 
 -- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
 -- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
@@ -75,9 +78,6 @@ lspconfig.rust_analyzer.setup({
         },
     },
 })
-
-
--- (Optional) Configure lua language server for neovim
 lsp.nvim_workspace()
 -- lsp setups
 lsp.setup()
