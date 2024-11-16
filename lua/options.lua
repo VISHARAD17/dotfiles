@@ -47,7 +47,7 @@ opt.wrap = false -- Disable line wrap
 opt.linebreak = true
 opt.list = false
 
-opt.clipboard = { "unnamed", "unnamedplus" } -- Use system clipboard.
+opt.clipboard = { "unnamed", "unnamedplus" } -- Use system clipboard
 
 
 -- Fix markdown indentation settings
@@ -59,7 +59,7 @@ opt.maxmempattern = 5000
 -- highlight cursor line
 vim.cmd([[highlight CursorLine cterm=NONE ctermbg=253 guibg=#2E2E2E]])
 
--- -- Enable horizontal scrolling
+-- -- Enable horizontal scrolling ( not working )
 -- opt.sidescrolloff = 5 -- Adjust the number of columns to keep visible on the sides
 -- opt.scrolloff = 5 -- Adjust the number of lines to keep visible on the top and bottom
 --
