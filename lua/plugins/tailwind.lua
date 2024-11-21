@@ -6,6 +6,6 @@ return {
     config = function ()
         require("tailwind-tools").setup({
             -- your configuration
-        }) 
+        })
     end
 }
