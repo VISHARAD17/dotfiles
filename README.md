@@ -11,11 +11,10 @@
 - fold
 - gitsigns
 - file-operations
-- markdownPreview
+- render-markdown
 - tailwindcss
 - lsp
 - lualine 
-- neoScroll
 - nvim-tree
 - surround
 - telescope
