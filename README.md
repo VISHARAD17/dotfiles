@@ -19,3 +19,4 @@
 - nvim-tree
 - surround
 - telescope
+- trouble ( for showing diagnostics )

@@ -73,9 +73,9 @@ vim.api.nvim_set_keymap('n', '<leader>gr', '<cmd>lua require "gitsigns".reset_hu
 vim.api.nvim_set_keymap('n', '<leader>gR', '<cmd>lua require "gitsigns".reset_buffer()<CR>', setOpts("Reset Buffer"))
 vim.api.nvim_set_keymap('n', '<leader>gs', '<cmd>lua require "gitsigns".stage_hunk()<CR>', setOpts("Stage Hunk"))
 vim.api.nvim_set_keymap('n', '<leader>gu', '<cmd>lua require "gitsigns".undo_stage_hunk()<CR>', setOpts("Undo Stage Hunk"))
-vim.api.nvim_set_keymap('n', '<leader>go', '<cmd>Telescope git_status<CR>', setOpts("Open changed file"))
-vim.api.nvim_set_keymap('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', setOpts("Checkout branch"))
-vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Telescope git_commits<CR>', setOpts("Checkout commit"))
+vim.api.nvim_set_keymap('n', '<leader>go', '<cmd>Telescope git_status<CR>', setOpts("all_changes"))
+vim.api.nvim_set_keymap('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', setOpts("all_branches"))
+vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Telescope git_commits<CR>', setOpts("all_commits"))
 
 -- LSP mappings
 vim.api.nvim_set_keymap('n', '<leader>lD', '<cmd>lua vim.lsp.buf.declaration()<CR>', setOpts("Declaration"))
@@ -103,7 +103,4 @@ vim.api.nvim_create_user_command('BufCurOnly', function()
   vim.cmd('bdelete#')
 end, {})
 
-keymap('n', '<leader>ka', ':BufCurOnly<CR>', {
-  noremap = true,
-  silent = true
-})
+keymap('n', '<leader>ka', ':BufCurOnly<CR>', { noremap = true, silent = true }) -- kill all bufferes, except the current one
