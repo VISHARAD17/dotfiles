@@ -46,14 +46,14 @@ return {
                             symlink_open = "",
                         },
                         git = {
-                            unstaged = "",
-                            staged = "S",
-                            unmerged = "",
-                            renamed = "➜",
-                            untracked = "U",
-                            deleted = "",
-                            ignored = "◌",
-                        },
+                            unstaged = "M",      -- Modified (unstaged changes)
+                            staged = "S",        -- Staged changes
+                            unmerged = "U",      -- Unmerged changes (conflicts)
+                            renamed = "R",       -- Renamed files
+                            untracked = "?",      -- Untracked files
+                            deleted = "D",       -- Deleted files
+                            ignored = "I",       -- Ignored files
+                        }
                     },
                 },
             },
