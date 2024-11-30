@@ -16,7 +16,7 @@ return {
                 update_root = true,
                 ignore_list = {},
                 update_cwd = true,
-},
+            },
             filters = {
                 custom = {
                     "^.git$",
