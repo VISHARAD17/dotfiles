@@ -16,7 +16,7 @@ return {
                 update_root = true,
                 ignore_list = {},
                 update_cwd = true,
-            },
+},
             filters = {
                 custom = {
                     "^.git$",
@@ -54,6 +54,16 @@ return {
                             deleted = "D",       -- Deleted files
                             ignored = "I",       -- Ignored files
                         }
+                    },
+                },
+                indent_markers = {
+                    enable = true,
+                    inline_arrows = true,
+                    icons = {
+                        corner = "└─",
+                        edge = "│ ",
+                        item = "├─",
+                        none = "  ",
                     },
                 },
             },
