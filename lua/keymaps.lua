@@ -54,12 +54,6 @@ keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', setOpts("File Explorer"))
 keymap('n', '<leader>k', '<cmd>bdelete!<CR>', setOpts("Kill Buffer"))
 keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
 
--- telescope
-keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", setOpts("find files"))
-keymap('n', '<leader>fg', "<cmd>lua require('telescope.builtin').live_grep()<CR>", setOpts("search text"))
-keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
-keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
-
 -- diagnostics
 keymap("n",'<leader>d', ":lua vim.diagnostic.open_float(nil, {focusable=true, scope='line'})<cr>", setOpts("open diagnostics"))
 
@@ -71,9 +65,9 @@ vim.api.nvim_set_keymap('n', '<leader>gl', '<cmd>lua require "gitsigns".blame_li
 vim.api.nvim_set_keymap('n', '<leader>gp', '<cmd>lua require "gitsigns".preview_hunk()<CR>', setOpts("Preview Hunk"))
 vim.api.nvim_set_keymap('n', '<leader>gr', '<cmd>lua require "gitsigns".reset_hunk()<CR>', setOpts("Reset Hunk"))
 vim.api.nvim_set_keymap('n', '<leader>gR', '<cmd>lua require "gitsigns".reset_buffer()<CR>', setOpts("Reset Buffer"))
-vim.api.nvim_set_keymap('n', '<leader>gs', '<cmd>lua require "gitsigns".stage_hunk()<CR>', setOpts("Stage Hunk"))
-vim.api.nvim_set_keymap('n', '<leader>gu', '<cmd>lua require "gitsigns".undo_stage_hunk()<CR>', setOpts("Undo Stage Hunk"))
-vim.api.nvim_set_keymap('n', '<leader>go', '<cmd>Telescope git_status<CR>', setOpts("git status"))
+vim.api.nvim_set_keymap('n', '<leader>gS', '<cmd>lua require "gitsigns".stage_hunk()<CR>', setOpts("Stage Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gU', '<cmd>lua require "gitsigns".undo_stage_hunk()<CR>', setOpts("Undo Stage Hunk"))
+vim.api.nvim_set_keymap('n', '<leader>gs', '<cmd>Telescope git_status<CR>', setOpts("git status"))
 vim.api.nvim_set_keymap('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', setOpts("all_branches"))
 vim.api.nvim_set_keymap('n', '<leader>gc', '<cmd>Telescope git_commits<CR>', setOpts("all_commits"))
 
@@ -87,14 +81,14 @@ vim.api.nvim_set_keymap('n', '<leader>li', '<cmd>LspInfo<CR>', setOpts("Info"))
 vim.api.nvim_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', setOpts("Code action"))
 vim.api.nvim_set_keymap('n', '<leader>lK', '<cmd>lua vim.lsp.buf.hover()<CR>', setOpts("Show documentation"))
 
--- File Search mappings
-vim.api.nvim_set_keymap('n', '<leader>fc', '<cmd>Telescope colorscheme<CR>', setOpts("Colorscheme"))
-vim.api.nvim_set_keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<CR>', setOpts("Find files"))
-vim.api.nvim_set_keymap('n', '<leader>ft', '<cmd>Telescope live_grep<CR>', setOpts("Find Text Pattern"))
-vim.api.nvim_set_keymap('n', '<leader>fr', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
-vim.api.nvim_set_keymap('n', '<leader>fh', '<cmd>Telescope help_tags<CR>', setOpts("Help tags"))
-vim.api.nvim_set_keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
-vim.api.nvim_set_keymap('n', '<leader>fg', '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', setOpts("Search in current file"))
+-- File Search mappings ( Telescope )
+keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
+keymap('n', '<leader>ff', '<cmd>lua require("telescope.builtin").find_files()<CR>', setOpts("Find files"))
+keymap('n', '<leader>ft', "<cmd>lua require('telescope.builtin').live_grep()<CR>", setOpts("search text"))
+keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
+keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
+keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
+keymap('n', '<leader>fc', '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', setOpts("Search in current file"))
 
 -- Manage buffers
 vim.api.nvim_create_user_command('BufCurOnly', function()
