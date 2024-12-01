@@ -13,10 +13,15 @@ opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true -- Ignore case
 opt.inccommand = "nosplit" -- preview incremental substitute
 opt.incsearch = true
-opt.laststatus = 0
+
+---- statusline --------
+opt.showmode = true
+opt.laststatus = 3
+vim.o.statusline = '%f [%{mode()}] %=%l'
 -- opt.list = true -- Show some invisible characters (tabs...
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
+vim.opt.numberwidth = 1
 -- opt.pumblend = 10 -- Popup blend
 -- opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = false -- Relative line numbers
@@ -25,7 +30,7 @@ opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize" }
 opt.shiftround = true -- Round indent
 opt.shiftwidth = 4 -- Size of an indent
 opt.shortmess:append { W = true, I = true, c = true }
-opt.showmode = false -- Dont show mode since we have a statusline
+
 opt.sidescrolloff = 8 -- Columns of context
 opt.signcolumn = "yes" -- Always show the signcolumn, otherwise it would shift the text each time
 opt.smartcase = true -- Don't ignore case with capitals
