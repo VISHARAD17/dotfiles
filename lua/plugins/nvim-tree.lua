@@ -52,7 +52,7 @@ return {
                             renamed = "R",       -- Renamed files
                             untracked = "?",      -- Untracked files
                             deleted = "D",       -- Deleted files
-                            ignored = "I",       -- Ignored files
+                            ignored = "◌",       -- Ignored files
                         }
                     },
                 },
