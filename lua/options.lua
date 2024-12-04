@@ -19,6 +19,9 @@ opt.showmode = true
 opt.laststatus = 3
 vim.o.statusline = '%f [%{mode()}] %=%l'
 
+--- cursor -------
+vim.opt.guicursor = "" -- fat cursor
+
 
 -- opt.list = true -- Show some invisible characters (tabs...
 opt.mouse = "a" -- Enable mouse mode
