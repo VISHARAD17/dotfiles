@@ -4,9 +4,9 @@ return {
         branch = 'v1.x',
         dependencies = {
             -- LSP Support
-        {'neovim/nvim-lspconfig',
-            event = {"BufReadPre", "BufNewFile"},
-        },
+            {'neovim/nvim-lspconfig',
+                event = {"BufReadPre", "BufNewFile"},
+            },
             {'williamboman/mason.nvim'},
             {'williamboman/mason-lspconfig.nvim'},
 
