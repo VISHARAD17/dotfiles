@@ -31,5 +31,13 @@ function ModeHighlight()
     return mode_map[mode] or mode
 end
 
+-- Function to get the current Git branch
+function GetGitBranch()
+    local handle = io.popen("git rev-parse --abbrev-ref HEAD 2>/dev/null")
+    local branch_name = handle:read("*a")
+    handle:close()
+    return branch_name ~= "" and branch_name:gsub("\n", "") or ""
+end
+
 -- Set the statusline with colorful current mode
-vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine#  %f %=%l'
+vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine#  %f %=[ %{v:lua.GetGitBranch()} ] %l'
