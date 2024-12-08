@@ -15,9 +15,6 @@ opt.inccommand = "nosplit" -- preview incremental substitute
 opt.incsearch = true
 
 ---- statusline --------
-opt.showmode = true
-opt.laststatus = 3
-vim.o.statusline = '%f [%{mode()}] %=%l'
 
 --- cursor -------
 vim.opt.guicursor = "" -- fat cursor

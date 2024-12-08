@@ -8,7 +8,7 @@ require('options')
 require('keymaps')
 require('diagnostics')
 require('lsp-config')
-
+require('statusline')
 -- command to refresh nvim tree on commit
 vim.cmd([[
   augroup NvimTreeRefreshOnCommit
