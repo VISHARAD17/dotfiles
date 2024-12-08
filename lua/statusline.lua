@@ -34,9 +34,11 @@ end
 -- Function to get the current Git branch
 function GetGitBranch()
     local handle = io.popen("git rev-parse --abbrev-ref HEAD 2>/dev/null")
-    local branch_name = handle:read("*a")
-    handle:close()
-    return branch_name ~= "" and branch_name:gsub("\n", "") or ""
+    if handle then
+        local branch_name = handle:read("*a")
+        handle:close()
+        return branch_name ~= "" and branch_name:gsub("\n", "") or ""
+    end
 end
 
 -- Set the statusline with colorful current mode

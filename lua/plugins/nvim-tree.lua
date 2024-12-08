@@ -29,7 +29,8 @@ return {
                 timeout=500
             },
             renderer = {
-                root_folder_modifier = ":t",
+                root_folder_label = false,
+                -- root_folder_modifier = ":t",
                 -- These icons are visible when you install web-devicons
                 icons = {
                     glyphs = {

@@ -11,7 +11,13 @@ return {
                 offsets = {
                     {
                         filetype = 'NvimTree',
-                        text = 'Files',
+                        text = function()
+                                -- Get the current working directory
+                                local cwd = vim.fn.getcwd()
+                                -- Extract the last part of the path (the folder name)
+                                local folder_name = cwd:match("([^/]+)$") or cwd
+                                return folder_name  -- Return the folder name to display
+                                end,
                         highlight = 'Directory',
                         text_align = 'center',
                         separator = true,
