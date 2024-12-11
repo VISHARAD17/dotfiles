@@ -1,5 +1,4 @@
 local opts = { noremap = true, silent = true }
-
 local keymap = vim.api.nvim_set_keymap
 
 local function setOpts(desc)
@@ -32,7 +31,7 @@ keymap("n", "<C-l>", "<C-w>l", opts) -- right window
 -- navigate buffers
 keymap("n", "<tab>", ":bnext<cr>", opts) -- Next Tab 
 keymap("n", "<s-tab>", ":bprevious<cr>", opts) -- Previous tab
-keymap("n", "<leader>h", ":nohlsearch<cr>", opts) -- No highlight search
+keymap("n", "<Esc>", ":nohlsearch<cr>", opts) -- No highlight search
 
 -- move text up and down
 -- keymap("n", "<a-j>", "<esc>:m .+1<cr>==gi", opts) -- Alt-j in windows only
@@ -55,8 +54,8 @@ keymap('n', '<leader>k', '<cmd>bdelete!<CR>', setOpts("Kill Buffer"))
 keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
 
 -- diagnostics
-keymap("n",'<leader>d', ":lua vim.diagnostic.open_float(nil, {focusable=true, scope='line'})<cr>", setOpts("open diagnostics"))
-
+keymap("n",'<leader>d', "<cmd>lua vim.diagnostic.open_float(nil, {focusable=true, scope='line'})<cr>", setOpts("open diagnostics"))
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 -- Git mappings
 vim.api.nvim_set_keymap('n', '<leader>gd', '<cmd>Gitsigns diffthis HEAD<CR>', setOpts("Diff"))
 vim.api.nvim_set_keymap('n', '<leader>gj', '<cmd>lua require "gitsigns".next_hunk()<CR>', setOpts("Next Hunk"))
@@ -80,6 +79,7 @@ vim.api.nvim_set_keymap('n', '<leader>ls', '<cmd>Telescope lsp_document_symbols<
 vim.api.nvim_set_keymap('n', '<leader>li', '<cmd>LspInfo<CR>', setOpts("Info"))
 vim.api.nvim_set_keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', setOpts("Code action"))
 vim.api.nvim_set_keymap('n', '<leader>lK', '<cmd>lua vim.lsp.buf.hover()<CR>', setOpts("Show documentation"))
+keymap('n', '<leader>fr', '<cmd>lua require("telescope.builtin").lsp_references()<cr>', setOpts("LSP references"))
 
 -- File Search mappings ( Telescope )
 keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
@@ -88,7 +88,11 @@ keymap('n', '<leader>ft', "<cmd>lua require('telescope.builtin').live_grep()<CR>
 keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
 keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
 keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
-keymap('n', '<leader>fc', '<cmd>lua require("telescope.builtin").current_buffer_fuzzy_find()<CR>', setOpts("Search in current file"))
+vim.keymap.set('n', '<leader>fc', function()
+    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+        previewer = false,
+    })
+end, { desc = '[F]ind [C]urrent file' })
 
 -- Manage buffers
 vim.api.nvim_create_user_command('BufCurOnly', function()

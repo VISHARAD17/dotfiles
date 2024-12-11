@@ -1,7 +1,15 @@
 local opt = vim.opt
+
+vim.g.have_nerd_font = true -- set nerd fot true
+
  --------- neovim options  ----------
 opt.autowrite = true -- enable auto write
-opt.clipboard = "unnamedplus" -- Sync with system clipboard
+
+-- sync clipboard between os and clipboard
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
+
 opt.completeopt = "menu,menuone,noselect"
 -- opt.conceallevel = 3 -- Hide * markup for bold and italic
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
@@ -11,16 +19,16 @@ opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true -- Ignore case
-opt.inccommand = "nosplit" -- preview incremental substitute
 opt.incsearch = true
 
----- statusline --------
+opt.list = true
+opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+opt.inccommand = 'nosplit'
 
 --- cursor -------
 vim.opt.guicursor = "" -- fat cursor
 
 
--- opt.list = true -- Show some invisible characters (tabs...
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
 vim.opt.numberwidth = 1
@@ -52,9 +60,9 @@ opt.undofile = true
 opt.winminwidth = 5 -- Minimum window width
 opt.wrap = false -- Disable line wrap
 opt.linebreak = true
-opt.list = false
+-- opt.list = false
 
-opt.clipboard = { "unnamed", "unnamedplus" } -- Use system clipboard
+-- opt.clipboard = { "unnamed", "unnamedplus" } -- Use system clipboard
 
 
 -- Fix markdown indentation settings
@@ -64,17 +72,18 @@ vim.g.markdown_recommended_style = 0
 opt.maxmempattern = 5000
 
 -- highlight cursor line
-vim.cmd([[highlight CursorLine cterm=NONE ctermbg=253 guibg=#2E2E2E]])
+--vim.cmd([[highlight CursorLine cterm=NONE ctermbg=253 guibg='#2E2E2E']])
 
--- -- Enable horizontal scrolling ( not working )
--- opt.sidescrolloff = 5 -- Adjust the number of columns to keep visible on the sides
--- opt.scrolloff = 5 -- Adjust the number of lines to keep visible on the top and bottom
---
--- -- Enable scrollbind for horizontal scrolling
--- opt.scrollbind = true
---
--- vim.cmd [[autocmd vim.lsp.inlay_hints(0, true)]]
--- vim.api.nvim_create_autocmd('[vim.lsp.buf.inlay_hints(0, true)]')
+-- Highlight when yanking (copying) text
+--  Try it with `yap` in normal mode
+--  See `:help vim.highlight.on_yank()`
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+})
 
 
 vim.o.foldmethod = 'expr'

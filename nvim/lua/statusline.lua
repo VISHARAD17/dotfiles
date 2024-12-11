@@ -18,15 +18,15 @@ vim.api.nvim_set_hl(0, "TerminalMode", { bg = "#c678dd", fg = 'Black' })  -- Hig
 function ModeHighlight()
     local mode = vim.fn.mode()
     local mode_map = {
-        n = "%#NormalMode#NORMAL",
-        i = "%#InsertMode#INSERT",
-        v = "%#VisualMode#VISUAL",
-        V = "%#VisualMode#VISUAL",
-        ['\22'] = "%#VisualBlockMode#V-BLOCK",  -- Ctrl-V for Visual Block mode
-        c = "%#CommandMode#COMMAND",
-        R = "%#ReplaceMode#REPLACE",
-        s = "%#SelectMode#SELECT",
-        t = "%#TerminalMode#TERMINAL"  -- Terminal mode
+        n = "%#NormalMode# NORMAL ",
+        i = "%#InsertMode# INSERT ",
+        v = "%#VisualMode# VISUAL ",
+        V = "%#VisualMode# VISUAL ",
+        ['\22'] = "%#VisualBlockMode# V-BLOCK ",  -- Ctrl-V for Visual Block mode
+        c = "%#CommandMode# COMMAND ",
+        R = "%#ReplaceMode# REPLACE ",
+        s = "%#SelectMode# SELECT ",
+        t = "%#TerminalMode# TERMINAL "  -- Terminal mode
     }
     return mode_map[mode] or mode
 end
