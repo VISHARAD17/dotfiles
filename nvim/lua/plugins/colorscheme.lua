@@ -1,6 +1,6 @@
 --darkplus theme from lunarvim
 return {
-   "lunarvim/darkplus.nvim",
+    "lunarvim/darkplus.nvim",
     priority = 1000,
     config = function()
         vim.opt.termguicolors = true
