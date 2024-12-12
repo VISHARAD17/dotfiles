@@ -11,6 +11,15 @@ require('lsp-config')
 require('statusline')
 
 
+-- cmd to refresh nvim tree on commit
+vim.cmd([[
+  augroup NvimTreeRefreshOnCommit
+    autocmd!
+    autocmd BufWritePost * if &ft == 'gitcommit' | NvimTreeRefresh | endif
+  augroup END
+]])
+
+
 -- function to clear all macros
 local function clear_macros()
     for i = 97, 122 do  -- ASCII values for 'a' to 'z'
