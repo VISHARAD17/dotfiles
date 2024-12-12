@@ -15,5 +15,6 @@ return {
 
         vim.api.nvim_set_hl(0, "StatusLine", {fg = "#ffffff", bg="#1e1e1e"})
         vim.api.nvim_set_hl(0, "StatusLineNC", {fg = "#ffffff", bg="#1e1e1e"})
+        vim.api.nvim_set_hl(0, "NvimTreeIndentMarker", {fg ='#808080', bg = 'none' })
     end
 }

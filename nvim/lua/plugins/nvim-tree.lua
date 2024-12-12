@@ -60,12 +60,12 @@ return {
                 indent_markers = {
                     enable = true,
                     inline_arrows = true,
-                    icons = {
-                        corner = "└─",
-                        edge = "│ ",
-                        item = "├─",
-                        none = "  ",
-                    },
+                    -- icons = {
+                    --     corner = "└─",
+                    --     edge = "│ ",
+                    --     item = "├─",
+                    --     none = "  ",
+                    -- },
                 },
             },
             diagnostics = {
