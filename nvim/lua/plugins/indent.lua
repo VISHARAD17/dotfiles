@@ -20,7 +20,7 @@ return
                     -- Options which control scope computation
                     options = {
                         border = 'both',
-                        indent_at_cursor = true,
+                        indent_at_cursor = false,
                         try_as_border = false,
                     },
                     symbol = "│",

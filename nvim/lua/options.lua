@@ -10,7 +10,7 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
-vim.o.cmdheight = 0 -- hide cmd line space
+vim.o.cmdheight = 1 -- cmd line height
 
 opt.completeopt = "menu,menuone,noselect"
 -- opt.conceallevel = 3 -- Hide * markup for bold and italic

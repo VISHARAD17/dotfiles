@@ -35,6 +35,11 @@ return {
                 indicator = {
                     style = 'icon'
                 }
+            },
+            highlights = {
+                fill = { fg = 'NONE', bg = '#181818' }, -- Dark background for unused space
+                background = { fg = '#808080', bg = '#181818' }, -- Light text for inactive tabs
+                buffer_selected = { fg = '#ffffff', bg = '#181818', bold = true }, -- Highlighted active tab
             }
         })
     end
