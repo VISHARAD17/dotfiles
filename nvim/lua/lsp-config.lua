@@ -16,6 +16,8 @@ require("mason").setup({
         -- "tsserver", -- using a plugin for this
         "eslint",
         "lua_ls",
+        "sqlls",
+        "sqls",
         "cssls",
         "rust-analyzer",
         "jsonls",
@@ -68,6 +70,26 @@ local lspconfig = require("lspconfig")
 lspconfig.pyright.setup{}
 lspconfig.eslint.setup{}
 lspconfig.lua_ls.setup{}
+
+require'lspconfig'.sqls.setup{
+  on_attach = function(client, bufnr)
+    require('sqls').on_attach(client, bufnr) -- require sqls.nvim
+  end,
+  settings = {
+    sqls = {
+      connections = {
+        {
+          driver = 'mysql',
+          dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
+        },
+        {
+          driver = 'postgresql',
+          dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
+        },
+      },
+    },
+  },
+}
 lspconfig.rust_analyzer.setup({
     filetypes = {"rust"},
     settigs = {
