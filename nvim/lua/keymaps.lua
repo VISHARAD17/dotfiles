@@ -50,7 +50,7 @@ keymap("v", "<S-k>", ":m '<-2<CR>gv=gv", opts) -- move line down
 --------------------------------- KEYMAPS for plugins ---------------------------------------------
 
 keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', setOpts("File Explorer"))
-keymap('n', '<leader>k', '<cmd>bdelete!<CR>', setOpts("Kill Buffer"))
+keymap('n', '<leader>kc', '<cmd>bdelete!<CR>', setOpts("kill current buffer"))
 keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
 
 -- diagnostics
