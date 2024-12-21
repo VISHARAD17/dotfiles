@@ -5,6 +5,7 @@ return {
     },
     event = { 'BufReadPre', 'BufNewFile' },
     config = function ()
+        vim.opt.termguicolors = true
         local bufferline = require('bufferline')
         bufferline.setup({
             options = {
@@ -25,6 +26,7 @@ return {
                     },
                 },
                 diagnostics = 'nvim_lsp',
+                show_tab_indicators = true,
                 always_show_bufferline = true,
                 separator_style = 'thin',
                 hover = {
