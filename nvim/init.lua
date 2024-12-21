@@ -38,6 +38,3 @@ local function clear_macros()
 end
 
 vim.api.nvim_create_user_command('ClearMacros', clear_macros, {})
-
--- highlight NvimTree window seperator
-vim.cmd([[highlight NvimTreeWinSeparator guifg=#6e7681 guibg=NONE ctermfg=white ctermbg=NONE]])

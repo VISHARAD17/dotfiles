@@ -1,8 +1,8 @@
+                                    --------- neovim options  ----------
 local opt = vim.opt
 
 vim.g.have_nerd_font = true -- set nerd fot true
 
- --------- neovim options  ----------
 opt.autowrite = true -- enable auto write
 
 -- sync clipboard between os and clipboard
@@ -27,13 +27,11 @@ opt.list = true
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 opt.inccommand = 'nosplit'
 
---- cursor -------
-vim.opt.guicursor = "" -- fat cursor
-
+opt.guicursor = "" -- fat cursor
 
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
-vim.opt.numberwidth = 1
+opt.numberwidth = 1
 -- opt.pumblend = 10 -- Popup blend
 -- opt.pumheight = 10 -- Maximum number of entries in a popup
 opt.relativenumber = false -- Relative line numbers
@@ -72,9 +70,6 @@ vim.g.markdown_recommended_style = 0
 
 -- for max horizontal text error maxmempattern
 opt.maxmempattern = 5000
-
--- highlight cursor line
---vim.cmd([[highlight CursorLine cterm=NONE ctermbg=253 guibg='#2E2E2E']])
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
