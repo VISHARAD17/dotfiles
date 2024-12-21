@@ -1,4 +1,5 @@
-return {
+return
+    {
         'VonHeikemen/lsp-zero.nvim',
         lazy = true,
         branch = 'v1.x',

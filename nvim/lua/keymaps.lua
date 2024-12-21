@@ -54,7 +54,7 @@ keymap('n', '<leader>k', '<cmd>bdelete!<CR>', setOpts("Kill Buffer"))
 keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
 
 -- diagnostics
-keymap("n",'<leader>d', "<cmd>lua vim.diagnostic.open_float(nil, {focusable=true, scope='line'})<cr>", setOpts("open diagnostics"))
+keymap("n",'<leader>d', "<cmd>lua vim.diagnostic.open_float(nil, {focus=true, scope='line'})<cr>", setOpts("open diagnostics"))
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 -- Git mappings
 keymap('n', '<leader>gd', '<cmd>Gitsigns diffthis HEAD<CR>', setOpts("Diff"))

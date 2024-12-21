@@ -1,5 +1,5 @@
 vim.diagnostic.config({
-    virtual_text = true,
+    virtual_text = false,
     signs = true,
     underline = true,
     update_in_insert = true,
@@ -9,6 +9,18 @@ vim.diagnostic.config({
         border = "rounded",
     },
 })
+
+local signs = {
+    Error = "✘",
+    Warn = "▲",
+    Hint = "⚑",
+    Info = "»"
+}
+
+for type, icon in pairs(signs) do
+    local hl = "DiagnosticSign" .. type
+    vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
 -- dimming the color of unused variables to this color insted of chaning them to comment color
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#808080" })

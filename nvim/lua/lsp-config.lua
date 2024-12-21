@@ -1,6 +1,13 @@
 -- lsp zero config
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp_zero = require('lsp-zero')
+lsp_zero.set_preferences({
+    name = 'recommended',
+    manage_nvim_cmp = true,
+    cmp_capabilities = true,
+    set_lsp_keymaps = false,  -- Add this line
+    configure_diagnostics = false,  -- Add this line
+    suggest_lsp_servers = true,  -- Suggest installing LSP servers
+})
 
 local mason = require('mason')
 mason.setup({
@@ -63,17 +70,25 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 local lspconfig = require("lspconfig")
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 -- local on_attach = require("lua.lsp-config").on_attach
 -- local capabilities = require('lua.lsp-config').capabilities
 
 -- setting up all language servers
-lspconfig.pyright.setup{}
-lspconfig.eslint.setup{}
-lspconfig.lua_ls.setup{}
+lspconfig.pyright.setup({
+    capabilities = capabilities
+})
+lspconfig.eslint.setup({
+    capabilities = capabilities
+})
+lspconfig.lua_ls.setup({
+    capabilities = capabilities
+})
 
 require'lspconfig'.sqls.setup{
   on_attach = function(client, bufnr)
     require('sqls').on_attach(client, bufnr) -- require sqls.nvim
+    capabilities = capabilities
   end,
   settings = {
     sqls = {
@@ -100,9 +115,9 @@ lspconfig.rust_analyzer.setup({
         },
     },
 })
-lsp.nvim_workspace()
+lsp_zero .nvim_workspace()
 -- lsp setups
-lsp.setup()
+lsp_zero.setup()
 
 
 local cmp = require('cmp')

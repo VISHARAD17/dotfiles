@@ -8,8 +8,6 @@ return {
         require('nvim-web-devicons').setup({
             default = true,
         })
-
-
         require("nvim-tree").setup({
             update_focused_file = {
                 enable = true,
@@ -29,8 +27,8 @@ return {
                 timeout=500
             },
             renderer = {
-                root_folder_label = false,
-                -- root_folder_modifier = ":t",
+                root_folder_label = false, -- disable this when using left side file-tree
+                -- root_folder_modifier = ":t", -- comment this out when using left size file-tree
                 -- These icons are visible when you install web-devicons
                 icons = {
                     glyphs = {
@@ -61,10 +59,10 @@ return {
                     enable = true,
                     inline_arrows = true,
                     icons = {
-                    --     corner = "└─",
+                        --     corner = "└─",
                         edge = "│",
-                    --     item = "├─",
-                    --     none = "  ",
+                        --     item = "├─",
+                        --     none = "  ",
                     },
                 },
             },
@@ -72,15 +70,39 @@ return {
                 enable = true,
                 show_on_dirs = false,
                 icons = {
-                    hint = "",
-                    info = "",
-                    warning = "",
-                    error = "",
+                    error = "✘",
+                    warning = "▲",
+                    hint = "⚑",
+                    info = "»"
                 },
             },
+            -- view = {
+            --     float = {
+            --         enable = true,
+            --         open_win_config = function()
+            --             local screen_w = vim.opt.columns:get()
+            --             local w_h = 100
+            --             local s_h = 42
+            --             local center_x = (screen_w - w_h) / 2
+            --             local center_y = ((vim.opt.lines:get() - s_h) / 5) - vim.opt.cmdheight:get()
+            --             return {
+            --                 border = "rounded",
+            --                 relative = "editor",
+            --                 row = center_y,
+            --                 col = center_x,
+            --                 width = w_h,
+            --                 height = s_h,
+            --             }
+            --         end,
+            --     },
+            --     width = function()
+            --         return math.floor(vim.opt.columns:get() * 5)
+            --     end,
+            -- },
+            --  use this for left side  nvim-tree
             view = {
                 width = 30,
-                side = "left",
+                side = "left"
             },
         })
 
