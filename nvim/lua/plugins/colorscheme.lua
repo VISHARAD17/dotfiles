@@ -17,7 +17,5 @@ return {
         vim.api.nvim_set_hl(0, "StatusLineNC", {fg = "#ffffff", bg="#1e1e1e"})
         vim.api.nvim_set_hl(0, "NvimTreeIndentMarker", {fg ='#808080', bg = 'none' })
         vim.api.nvim_set_hl(0, "FloatBorder", {fg = '#6e7681', bg = 'none'})
-        vim.api.nvim_set_hl(0, "WhichKeyBorder", {fg = '#ffffff', bg = 'none'})
-        vim.api.nvim_set_hl(0, "WhichKey", {fg = '#ffffff', bg = 'none'})
     end
 }
