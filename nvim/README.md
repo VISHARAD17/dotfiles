@@ -19,3 +19,4 @@
 - surround
 - telescope
 - trouble ( for showing diagnostics )
+- dap ( currently not working )
