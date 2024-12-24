@@ -5,9 +5,7 @@ vim.g.have_nerd_font = true -- set nerd fot true
 opt.autowrite = true -- enable auto write
 
 -- sync clipboard between os and clipboard
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+opt.clipboard = 'unnamedplus'
 
 
 opt.completeopt = "menu,menuone,noselect"
