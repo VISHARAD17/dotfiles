@@ -3,6 +3,8 @@ local opt = vim.opt
 opt.showmode = false
 opt.laststatus = 3
 
+vim.o.cmdheight = 1 -- cmd line height
+
 -- Set highlight groups for each mode
 vim.api.nvim_set_hl(0, "NormalMode", { bg = "#388bfd", fg = 'Black' })
 vim.api.nvim_set_hl(0, "InsertMode", { bg = "#56d364", fg = 'Black' })
@@ -21,7 +23,7 @@ function ModeHighlight()
         n = "%#NormalMode# NORMAL ",
         i = "%#InsertMode# INSERT ",
         v = "%#VisualMode# VISUAL ",
-        V = "%#VisualMode# VISUAL ",
+        V = "%#VisualMode# V-LINE ",
         ['\22'] = "%#VisualBlockMode# V-BLOCK ",  -- Ctrl-V for Visual Block mode
         c = "%#CommandMode# COMMAND ",
         R = "%#ReplaceMode# REPLACE ",
@@ -42,4 +44,4 @@ function GetGitBranch()
 end
 
 -- Set the statusline with colorful current mode
-vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine#  %f %=[ %{v:lua.GetGitBranch()} ] %l'
+vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine# %m%f %=[ %{v:lua.GetGitBranch()} ] %l'

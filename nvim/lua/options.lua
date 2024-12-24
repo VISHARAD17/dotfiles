@@ -1,6 +1,5 @@
                                     --------- neovim options  ----------
 local opt = vim.opt
-
 vim.g.have_nerd_font = true -- set nerd fot true
 
 opt.autowrite = true -- enable auto write
@@ -10,7 +9,6 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
-vim.o.cmdheight = 1 -- cmd line height
 
 opt.completeopt = "menu,menuone,noselect"
 -- opt.conceallevel = 3 -- Hide * markup for bold and italic
