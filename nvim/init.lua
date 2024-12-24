@@ -9,7 +9,6 @@ require('keymaps')
 require('diagnostics')
 require('lsp-config')
 require('statusline')
-require('winbar')
 
 -- cmd to refresh nvim tree on commit
 vim.cmd([[
