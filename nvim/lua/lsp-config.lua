@@ -129,8 +129,11 @@ lsp_zero.setup()
 
 local cmp = require('cmp')
 cmp.setup({
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+    sources = cmp.config.sources({
+        { name = 'render-markdown' },
+    }),
 })
