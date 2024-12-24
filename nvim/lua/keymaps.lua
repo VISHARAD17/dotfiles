@@ -83,12 +83,19 @@ keymap('n', '<leader>lK', '<cmd>lua vim.lsp.buf.signature_help()<CR>', setOpts("
 keymap('n', '<leader>fr', '<cmd>lua require("telescope.builtin").lsp_references()<cr>', setOpts("LSP references"))
 
 -- File Search mappings ( Telescope )
-keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
 keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", setOpts("Find files"))
 keymap('n', '<leader>ft', "<cmd>lua require('telescope.builtin').live_grep()<CR>", setOpts("Find text"))
 keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
 keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
 keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
+-- keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
+
+vim.keymap.set('n', '<leader>fb', function()
+    require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{
+        previewer = false;
+    })
+end, {desc = "Find open buffers"})
+
 vim.keymap.set('n', '<leader>fc', function()
     require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
         previewer = false,
