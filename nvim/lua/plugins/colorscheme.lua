@@ -22,5 +22,7 @@ return {
         vim.api.nvim_set_hl(0, "WinBarNC", { fg = '#a9a9a9', bg = '#181818'})
         vim.api.nvim_set_hl(0, "WinBar", { fg = 'none', bg = 'none' })
         vim.api.nvim_set_hl(0, "WinBarInactive", { fg = "#a9a9a9", bg = '#3f3f3f' })
+        vim.api.nvim_set_hl(0, "RenderMarkdownCode", { fg = "none", bg = '#222222' })
+        vim.api.nvim_set_hl(0, "RenderMarkdownCodeInline", { fg = "none", bg = '#222222' })
     end
 }
