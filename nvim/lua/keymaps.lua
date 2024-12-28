@@ -109,7 +109,7 @@ vim.api.nvim_create_user_command('BufCurOnly', function()
   vim.cmd('bdelete#')
 end, {})
 
-keymap('n', '<leader>ka', ':BufCurOnly<CR>', setOpts("kill all buff except cur")) -- kill all bufferes, except the current one
+keymap('n', '<leader>ko', ':BufCurOnly<CR>', setOpts("kill all buff except cur")) -- kill all bufferes, except the current one
 
 
 -- markdown 
