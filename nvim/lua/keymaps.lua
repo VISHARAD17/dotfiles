@@ -110,7 +110,3 @@ vim.api.nvim_create_user_command('BufCurOnly', function()
 end, {})
 
 keymap('n', '<leader>ko', ':BufCurOnly<CR>', setOpts("kill all buff except cur")) -- kill all bufferes, except the current one
-
-
--- markdown 
-keymap('n', '<leader>mp', ':MarkdownPreview<CR>', setOpts("Markdown Preview")) -- kill all bufferes, except the current one
