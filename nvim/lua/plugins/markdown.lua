@@ -1,15 +1,10 @@
 return
     {
-    "OXY2DEV/markview.nvim",
-    lazy = false,      -- Recommended
-    -- ft = "markdown" -- If you decide to lazy-load anyway
-    opts = {
-        hybrid_modes = {"n", "v", "i"},
-        modes = { "n", "no", "c", "i", "v" }
-    },
-
-    dependencies = {
-        "nvim-treesitter/nvim-treesitter",
-        "nvim-tree/nvim-web-devicons"
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        build = "cd app && yarn install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
     }
-}
