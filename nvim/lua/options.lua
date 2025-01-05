@@ -23,7 +23,7 @@ opt.list = true
 opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 opt.inccommand = 'nosplit'
 
-opt.guicursor = "" -- fat cursor
+-- opt.guicursor = "" -- fat cursor
 
 opt.mouse = "a" -- Enable mouse mode
 opt.number = true -- Print line number
