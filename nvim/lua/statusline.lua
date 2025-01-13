@@ -44,4 +44,4 @@ function GetGitBranch()
 end
 
 -- Set the statusline with colorful current mode
-vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine# %m%f %=[ %{v:lua.GetGitBranch()} ] %l'
+vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine# %f %m %=[ %{v:lua.GetGitBranch()} ] %l'
