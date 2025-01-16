@@ -18,7 +18,6 @@ vim.cmd([[
   augroup END
 ]])
 
-
 -- function to clear all macros
 local function clear_macros()
     for i = 97, 122 do  -- ASCII values for 'a' to 'z'

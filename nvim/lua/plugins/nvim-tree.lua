@@ -27,8 +27,8 @@ return {
                 timeout=500
             },
             renderer = {
-                root_folder_label = false, -- disable this when using left side file-tree
-                -- root_folder_modifier = ":t", -- comment this out when using left size file-tree
+                -- root_folder_label = true, -- disable this when using left side file-tree
+                root_folder_modifier = ":t", -- comment this out when using left size file-tree
                 -- These icons are visible when you install web-devicons
                 icons = {
                     glyphs = {
