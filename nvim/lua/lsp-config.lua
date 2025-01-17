@@ -1,5 +1,7 @@
 -- lsp zero config
 local lsp_zero = require('lsp-zero')
+local luasnip = require('luasnip')
+
 lsp_zero.set_preferences({
     name = 'recommended',
     manage_nvim_cmp = true,
@@ -15,6 +17,10 @@ mason.setup({
         border = "rounded",
     },
 })
+
+
+require('luasnip.loaders.from_vscode').lazy_load()
+require('luasnip.loaders.from_snipmate').lazy_load()
 
 
 require("mason").setup({
@@ -114,7 +120,7 @@ require'lspconfig'.sqls.setup{
 }
 lspconfig.rust_analyzer.setup({
     filetypes = {"rust"},
-    settigs = {
+    settings = {
         ['rust-analyzer'] = {
             cargo = {
                 allFeatures = true,
@@ -129,8 +135,85 @@ lsp_zero.setup()
 
 local cmp = require('cmp')
 cmp.setup({
+    -- window = {
+    --     completion = cmp.config.window.bordered(),
+    --     documentation = cmp.config.window.bordered(),
+    -- },
+    --
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
+
+    sources = {
+        { name = 'nvim_lsp', priority = 1000 },  -- LSP
+        { name = 'luasnip', priority = 750 },   -- Snippets
+        { name = 'buffer', priority = 500 },    -- Text within current buffer
+        { name = 'path', priority = 250 },      -- File system paths
+        { name = 'nvim_lua', priority = 100 },  -- Neovim's Lua API
+    },
+
     window = {
-        completion = cmp.config.window.bordered(),
-        documentation = cmp.config.window.bordered(),
+        completion = {
+            border = "rounded",
+            winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+        },
+        documentation = {
+            border = "rounded",
+            winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+        },
+    },
+
+    formatting = {
+        fields = {"abbr", "menu", "kind"},
+        format = function(entry, vim_item)
+            -- Kind icons
+            local kind_icons = {
+                Text = "",
+                Method = "󰆧",
+                Function = "󰊕",
+                Constructor = "",
+                Field = "󰇽",
+                Variable = "󰂡",
+                Class = "󰠱",
+                Interface = "",
+                Module = "",
+                Property = "󰜢",
+                Unit = "",
+                Value = "󰎠",
+                Enum = "",
+                Keyword = "󰌋",
+                Snippet = "",
+                Color = "󰏘",
+                File = "󰈙",
+                Reference = "",
+                Folder = "󰉋",
+                EnumMember = "",
+                Constant = "󰏿",
+                Struct = "",
+                Event = "",
+                Operator = "󰆕",
+                TypeParameter = "󰅲",
+            }
+
+            -- Kind text and icons
+            vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
+
+            -- Source
+            vim_item.menu = ({
+                nvim_lsp = "[LSP]",
+                luasnip = "[Snippet]",
+                buffer = "[Buffer]",
+                path = "[Path]",
+                nvim_lua = "[Lua]",
+            })[entry.source.name]
+
+            return vim_item
+        end
+    },
+
+    experimental = {
+        ghost_text = true,  -- Show future text as gray text
     }
 })
