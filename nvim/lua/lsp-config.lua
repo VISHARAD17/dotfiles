@@ -29,7 +29,6 @@ require("mason").setup({
         -- "tsserver", -- using a plugin for this
         "eslint",
         "lua_ls",
-        "sqlls",
         "sqls",
         "cssls",
         "rust-analyzer",
