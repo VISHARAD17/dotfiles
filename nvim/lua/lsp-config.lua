@@ -157,6 +157,7 @@ cmp.setup({
         completion = {
             border = "rounded",
             winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+            side_padding = 1,
         },
         documentation = {
             border = "rounded",
