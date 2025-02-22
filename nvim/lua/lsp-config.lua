@@ -214,6 +214,6 @@ cmp.setup({
     },
 
     experimental = {
-        ghost_text = true,  -- Show future text as gray text
+        ghost_text = false,  -- Show future text as gray text
     }
 })
