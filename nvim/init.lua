@@ -3,6 +3,7 @@ vim.g.maplocalleader = " "
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+--- import everything ---
 require('lazy-config')
 require('options')
 require('keymaps')

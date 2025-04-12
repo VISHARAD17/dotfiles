@@ -1,8 +1,8 @@
 return
     {
         "folke/trouble.nvim",
+        event = "BufReadPost", -- load after the current buffer is read
         opts = {}, -- for default options, refer to the configuration section for custom setup.
-        cmd = "Trouble",
         keys = {
             {
                 "<leader>xd",

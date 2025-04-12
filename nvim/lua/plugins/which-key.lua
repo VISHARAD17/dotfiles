@@ -1,6 +1,6 @@
 return {
     "folke/which-key.nvim",
-    event = "VeryLazy",
+    event = 'VimEnter',
     opts = {
         win = {
             border = "rounded", -- none, single, double, shadow

@@ -1,5 +1,6 @@
 return {
     "LunarVim/bigfile.nvim",
+    lazy = true,
     config = function ()
         -- default config
         require("bigfile").setup {

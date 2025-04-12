@@ -1,6 +1,7 @@
 -- plugins to display filename on the right top
 return {
     "b0o/incline.nvim",
+    lazy = true,
     dependencies = {
         "nvim-tree/nvim-web-devicons",
     },

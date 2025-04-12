@@ -1,5 +1,6 @@
 return{
     "lewis6991/gitsigns.nvim",
+    event = "BufReadPost", -- load after the current buffer is read
     config = function()
         require('gitsigns').setup {
             signs = {

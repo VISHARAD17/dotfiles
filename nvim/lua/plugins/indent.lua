@@ -1,9 +1,7 @@
 return {
-    -- Active indent guide and indent text objects. When you're browsing
-    -- code, this highlights the current level of indentation, and animates
-    -- the highlighting.
     {
         "echasnovski/mini.indentscope",
+        event = { "BufReadPre", "BufNewFile" },
         version = false, -- wait till new 0.7.0 release to put it back on semver
         -- event = "LazyFile",
         opts = {
@@ -27,14 +25,14 @@ return {
         end,
     },
 
-    -- disable inent-blankline scope when mini-indentscope is enabled
     {
         "lukas-reineke/indent-blankline.nvim",
+        event = { "BufReadPost", "BufNewFile" },
         config = function()
             require("ibl").setup({
-            indent = {
-                char =  "│",
-            },
+                indent = {
+                    char =  "│",
+                },
                 scope = { enabled = false },
             })
 
