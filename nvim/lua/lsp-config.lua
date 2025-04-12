@@ -1,21 +1,27 @@
--- LSP Configuration
-local lspconfig = require('lspconfig')
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- lsp zero config
+local lsp_zero = require('lsp-zero')
+local luasnip = require('luasnip')
 
--- Setup mason
-require('mason').setup({
-    ui = {
-        border = "rounded",
-        icons = {
-            package_installed = "✓",
-            package_pending = "➜",
-            package_uninstalled = "✗"
-        }
-    }
+lsp_zero.set_preferences({
+    name = 'recommended',
+    manage_nvim_cmp = false,  -- Changed to false since we're using blink
+    cmp_capabilities = true,
+    set_lsp_keymaps = false,
+    configure_diagnostics = false,
+    suggest_lsp_servers = true,
 })
 
--- Setup mason-lspconfig
-require('mason-lspconfig').setup({
+local mason = require('mason')
+mason.setup({
+    ui = {
+        border = "rounded",
+    },
+})
+
+require('luasnip.loaders.from_vscode').lazy_load()
+require('luasnip.loaders.from_snipmate').lazy_load()
+
+require("mason").setup({
     ensure_installed = {
         "pyright",
         "eslint",
@@ -29,36 +35,63 @@ require('mason-lspconfig').setup({
     automatic_installation = true,
 })
 
--- Setup LSP servers
-require('mason-lspconfig').setup_handlers({
-    function(server_name)
-        lspconfig[server_name].setup({
-            capabilities = capabilities,
-        })
-    end,
+-- Use LspAttach autocommand to only map the following keys
+-- after the language server attaches to the current buffer
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+  callback = function(ev)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+  end,
 })
 
--- Special configurations for specific LSP servers
-lspconfig.sqls.setup({
-    capabilities = capabilities,
-    settings = {
-        sqls = {
-            connections = {
-                {
-                    driver = 'mysql',
-                    dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
-                },
-                {
-                    driver = 'postgresql',
-                    dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-                },
-            },
+local lspconfig = require("lspconfig")
+local blink = require('blink')
+local capabilities = blink.capabilities
+
+-- setting up all language servers
+lspconfig.pyright.setup({
+    capabilities = capabilities
+})
+
+lspconfig.eslint.setup({
+    capabilities = capabilities
+})
+
+lspconfig.lua_ls.setup({
+    capabilities = capabilities
+})
+
+lspconfig.marksman.setup({
+    capabilities = capabilities
+})
+
+-- java
+lspconfig.jdtls.setup({
+    capabilities = capabilities
+})
+
+require'lspconfig'.sqls.setup{
+  on_attach = function(client, bufnr)
+    require('sqls').on_attach(client, bufnr) -- require sqls.nvim
+    capabilities = capabilities
+  end,
+  settings = {
+    sqls = {
+      connections = {
+        {
+          driver = 'mysql',
+          dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
         },
+        {
+          driver = 'postgresql',
+          dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
+        },
+      },
     },
-})
-
+  },
+}
 lspconfig.rust_analyzer.setup({
-    capabilities = capabilities,
     filetypes = {"rust"},
     settings = {
         ['rust-analyzer'] = {
@@ -68,70 +101,20 @@ lspconfig.rust_analyzer.setup({
         },
     },
 })
+lsp_zero.nvim_workspace()
+-- lsp setups
+lsp_zero.setup()
 
--- LSP keymaps
-vim.api.nvim_create_autocmd('LspAttach', {
-    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-    callback = function(ev)
-        -- Enable completion triggered by <c-x><c-o>
-        vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-        -- Buffer local mappings
-        local opts = { buffer = ev.buf }
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-        vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-        vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-        vim.keymap.set('n', '<space>wl', function()
-            print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        end, opts)
-        vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-        vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-        vim.keymap.set('n', '<space>f', function()
-            vim.lsp.buf.format { async = true }
-        end, opts)
-    end,
-})
-
--- Diagnostic configuration
--- vim.diagnostic.config({
---     virtual_text = true,
---     signs = true,
---     underline = true,
---     update_in_insert = false,
---     severity_sort = false,
--- })
-
--- -- Diagnostic keymaps
--- vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
--- vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
--- vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
--- vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-
--- Setup blink.nvim
-require('blink').setup({
-    -- Use the same keybindings as before
-    mapping = {
-        ['<C-Space>'] = require('blink').complete(),
-        ['<CR>'] = require('blink').confirm(),
-        ['<Tab>'] = require('blink').select_next_item(),
-        ['<S-Tab>'] = require('blink').select_prev_item(),
-        ['<C-e>'] = require('blink').close(),
-        ['<C-f>'] = require('blink').scroll_docs(4),
-        ['<C-b>'] = require('blink').scroll_docs(-4),
-    },
+-- Blink setup
+blink.setup({
     sources = {
-        { name = 'nvim_lsp', priority = 1000 },
-        { name = 'luasnip', priority = 750 },
-        { name = 'buffer', priority = 500 },
-        { name = 'path', priority = 250 },
-        { name = 'nvim_lua', priority = 100 },
+        { name = 'nvim_lsp', priority = 1000 },  -- LSP
+        { name = 'luasnip', priority = 750 },   -- Snippets
+        { name = 'buffer', priority = 500 },    -- Text within current buffer
+        { name = 'path', priority = 250 },      -- File system paths
+        { name = 'nvim_lua', priority = 100 },  -- Neovim's Lua API
     },
+
     window = {
         completion = {
             border = "rounded",
@@ -143,9 +126,11 @@ require('blink').setup({
             winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
         },
     },
+
     formatting = {
         fields = {"abbr", "menu", "kind"},
         format = function(entry, vim_item)
+            -- Kind icons
             local kind_icons = {
                 Text = "",
                 Method = "󰆧",
@@ -173,7 +158,11 @@ require('blink').setup({
                 Operator = "󰆕",
                 TypeParameter = "󰅲",
             }
+
+            -- Kind text and icons
             vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind)
+
+            -- Source
             vim_item.menu = ({
                 nvim_lsp = "[LSP]",
                 luasnip = "[Snippet]",
@@ -181,7 +170,48 @@ require('blink').setup({
                 path = "[Path]",
                 nvim_lua = "[Lua]",
             })[entry.source.name]
+
             return vim_item
         end
     },
+
+    -- Snippet support
+    snippet = {
+        expand = function(args)
+            luasnip.lsp_expand(args.body)
+        end,
+    },
+    
+    -- Tab completion keybindings
+    keybinds = {
+        ['<Tab>'] = function()
+            if blink.visible() then
+                blink.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, true, true), 'n', false)
+            end
+        end,
+        ['<S-Tab>'] = function()
+            if blink.visible() then
+                blink.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<S-Tab>', true, true, true), 'n', false)
+            end
+        end,
+        ['<CR>'] = function()
+            if blink.visible() then
+                blink.confirm()
+            else
+                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, true, true), 'n', false)
+            end
+        end,
+    },
+
+    experimental = {
+        ghost_text = false,  -- Show future text as gray text
+    }
 })
