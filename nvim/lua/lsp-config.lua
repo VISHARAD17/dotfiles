@@ -4,7 +4,7 @@ local luasnip = require('luasnip')
 
 lsp_zero.set_preferences({
     name = 'recommended',
-    manage_nvim_cmp = false,  -- Changed to false since we're using blink
+    manage_nvim_cmp = false,  -- Changed to false since we're using blink.cmp
     cmp_capabilities = true,
     set_lsp_keymaps = false,
     configure_diagnostics = false,
@@ -46,8 +46,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 local lspconfig = require("lspconfig")
-local blink = require('blink')
-local capabilities = blink.capabilities
+local blink_cmp = require('blink.cmp')
+local capabilities = blink_cmp.default_capabilities()
 
 -- setting up all language servers
 lspconfig.pyright.setup({
@@ -105,8 +105,8 @@ lsp_zero.nvim_workspace()
 -- lsp setups
 lsp_zero.setup()
 
--- Blink setup
-blink.setup({
+-- Blink.cmp setup
+local cmp = blink_cmp.setup({
     sources = {
         { name = 'nvim_lsp', priority = 1000 },  -- LSP
         { name = 'luasnip', priority = 750 },   -- Snippets
@@ -182,31 +182,31 @@ blink.setup({
         end,
     },
     
-    -- Tab completion keybindings
-    keybinds = {
-        ['<Tab>'] = function()
-            if blink.visible() then
-                blink.select_next_item()
+    -- Keybindings
+    mapping = {
+        ['<Tab>'] = function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
             else
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Tab>', true, true, true), 'n', false)
+                fallback()
             end
         end,
-        ['<S-Tab>'] = function()
-            if blink.visible() then
-                blink.select_prev_item()
+        ['<S-Tab>'] = function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             else
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<S-Tab>', true, true, true), 'n', false)
+                fallback()
             end
         end,
-        ['<CR>'] = function()
-            if blink.visible() then
-                blink.confirm()
+        ['<CR>'] = function(fallback)
+            if cmp.visible() then
+                cmp.confirm()
             else
-                vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<CR>', true, true, true), 'n', false)
+                fallback()
             end
         end,
     },

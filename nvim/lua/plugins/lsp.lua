@@ -11,13 +11,10 @@ return
             {'williamboman/mason.nvim'},
             {'williamboman/mason-lspconfig.nvim'},
 
-            -- Replace nvim-cmp with blink.nvim
+            -- Replace nvim-cmp with blink.cmp from Saghen
             {
-                'karimodm/blink.nvim',
+                'Saghen/blink.cmp',
                 event = 'InsertEnter',
-                dependencies = {
-                    'nvim-lua/plenary.nvim'
-                },
             },
 
             -- Snippets
