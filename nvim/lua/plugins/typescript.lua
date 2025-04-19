@@ -1,9 +1,7 @@
 return
 {
     "pmizio/typescript-tools.nvim",
-    lazy = true,
-    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" , lazy = true},
+    event = "VimEnter",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"},
     opts = {},
-    config = function()
-        require("typescript-tools").setup {}
-    end,}
+    }

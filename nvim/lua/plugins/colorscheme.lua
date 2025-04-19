@@ -16,7 +16,7 @@ return {
         vim.api.nvim_set_hl(0, "CursorLineNr", { fg = '#ffffff', bg = 'NONE', bold = true, })
         vim.api.nvim_set_hl(0, "StatusLine", {fg = "#ffffff", bg="#1e1e1e"})
         vim.api.nvim_set_hl(0, "StatusLineNC", {fg = "#ffffff", bg="#1e1e1e"})
-        vim.api.nvim_set_hl(0, "NvimTreeIndentMarker", {fg ='#3f3f3f', bg = 'none' })
+        vim.api.nvim_set_hl(0, "NvimTreeIndentMarker", {fg ='#8c8a8a', bg = 'none' })
         vim.api.nvim_set_hl(0, "FloatBorder", {fg = '#6e7681', bg = 'none'})
         vim.api.nvim_set_hl(0, "NvimTreeWinSeparator",{fg = '#a9a9a9', bg = 'none'})
         vim.api.nvim_set_hl(0, "EndOfBuffer", {fg = '#6e7681', bg = 'none'})
