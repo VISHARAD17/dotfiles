@@ -89,6 +89,7 @@ keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files")
 keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
 keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
 -- keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
+keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').find_files({cwd = vim.fn.expand('%:p:h')})<CR>", { desc = "File " })
 
 vim.keymap.set('n', '<leader>fb', function()
     require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{
