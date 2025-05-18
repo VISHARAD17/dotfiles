@@ -1,124 +1,126 @@
--- lsp zero config
-local lsp_zero = require('lsp-zero')
-local luasnip = require('luasnip')
+-- lua/lsp-config.lua
+local M = {}
 
-lsp_zero.set_preferences({
-    name = 'recommended',
-    manage_nvim_cmp = true,
-    cmp_capabilities = true,
-    set_lsp_keymaps = false,  -- Add this line
-    configure_diagnostics = false,  -- Add this line
-    suggest_lsp_servers = true,  -- Suggest installing LSP servers
-})
-
-local mason = require('mason')
-mason.setup({
+-- Set up Mason for package management
+require('mason').setup({
     ui = {
         border = "rounded",
     },
 })
 
-
-require('luasnip.loaders.from_vscode').lazy_load()
-require('luasnip.loaders.from_snipmate').lazy_load()
-
-
-require("mason").setup({
+-- Configure Mason to automatically install these LSP servers
+require('mason-lspconfig').setup({
     ensure_installed = {
         "pyright",
-        -- "tsserver", -- using a plugin for this
         "eslint",
         "lua_ls",
         "sqls",
         "cssls",
         "jdtls",
-        "rust-analyzer",
+        "rust_analyzer",
         "jsonls",
         "marksman",
     },
     automatic_installation = true,
 })
 
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+-- Set up completion
+local cmp = require('cmp')
+local luasnip = require('luasnip')
 
-    -- Buffer local mappings.
-    -- all keys are set as globle in whichkey.lua ( for now not attached when lsp buffer is active)
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    -- local opts = { buffer = ev.buf }
-    -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    -- vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    -- vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    -- vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    -- vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    -- vim.keymap.set('n', '<space>wl', function()
-    --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    -- end, opts)
-    -- vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    -- vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-    -- vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-    -- vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    -- vim.keymap.set('n', '<space>f', function()
-    --   vim.lsp.buf.format { async = true }
-    -- end, opts)
-  end,
-})
+-- Load snippets
+require('luasnip.loaders.from_vscode').lazy_load()
+require('luasnip.loaders.from_snipmate').lazy_load()
 
-local lspconfig = require("lspconfig")
+-- LSP capabilities for completion
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- local on_attach = require("lua.lsp-config").on_attach
--- local capabilities = require('lua.lsp-config').capabilities
 
--- setting up all language servers
+-- Define on_attach function for keymaps and buffer-specific settings
+local on_attach = function(_, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[bufnr].omnifunc = 'v:lua.vim.lsp.omnifunc'
+    
+    -- Buffer local mappings - configured in whichkey.lua
+    -- Define your keymaps here or in whichkey.lua as needed
+end
+
+-- Configure LSP servers
+local lspconfig = require('lspconfig')
+
+-- Python
 lspconfig.pyright.setup({
-    capabilities = capabilities
+    capabilities = capabilities,
+    on_attach = on_attach,
 })
 
+-- ESLint
 lspconfig.eslint.setup({
-    capabilities = capabilities
+    capabilities = capabilities,
+    on_attach = on_attach,
 })
 
+-- Lua
 lspconfig.lua_ls.setup({
-    capabilities = capabilities
-})
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            -- diagnostics = {
+            --     globals = { "vim" }
+            -- },
+            workspace = {
+                library = vim.api.nvim_get_runtime_file("", true),
+                checkThirdParty = false
+            },
+            telemetry = {
+                enable = false,
+            },
 
-lspconfig.marksman.setup({
-    capabilities = capabilities
-})
-
--- java
-lspconfig.jdtls.setup({
-    capabilities = capabilities
-})
-
-require'lspconfig'.sqls.setup{
-  on_attach = function(client, bufnr)
-    require('sqls').on_attach(client, bufnr) -- require sqls.nvim
-    capabilities = capabilities
-  end,
-  settings = {
-    sqls = {
-      connections = {
-        {
-          driver = 'mysql',
-          dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
         },
-        {
-          driver = 'postgresql',
-          dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
-        },
-      },
     },
-  },
-}
+})
+
+-- Markdown
+lspconfig.marksman.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+})
+
+-- Java
+lspconfig.jdtls.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
+})
+
+-- SQL
+lspconfig.sqls.setup({
+    capabilities = capabilities,
+    on_attach = function(client, bufnr)
+        on_attach(client, bufnr)
+        -- If you're using sqls.nvim plugin
+        if pcall(require, 'sqls') then
+            require('sqls').on_attach(client, bufnr)
+        end
+    end,
+    settings = {
+        sqls = {
+            connections = {
+                {
+                    driver = 'mysql',
+                    dataSourceName = 'root:root@tcp(127.0.0.1:13306)/world',
+                },
+                {
+                    driver = 'postgresql',
+                    dataSourceName = 'host=127.0.0.1 port=15432 user=postgres password=mysecretpassword1234 dbname=dvdrental sslmode=disable',
+                },
+            },
+        },
+    },
+})
+
+-- Rust
 lspconfig.rust_analyzer.setup({
+    capabilities = capabilities,
+    on_attach = on_attach,
     filetypes = {"rust"},
     settings = {
         ['rust-analyzer'] = {
@@ -128,24 +130,54 @@ lspconfig.rust_analyzer.setup({
         },
     },
 })
-lsp_zero .nvim_workspace()
--- lsp setups
-lsp_zero.setup()
 
+-- Configure diagnostics appearance
+-- vim.diagnostic.config({
+--     virtual_text = true,
+--     signs = true,
+--     underline = true,
+--     update_in_insert = false,
+--     severity_sort = true,
+--     float = {
+--         border = "rounded",
+--         source = "always",
+--     },
+-- })
 
-local cmp = require('cmp')
+-- Set up completion
 cmp.setup({
-    -- window = {
-    --     completion = cmp.config.window.bordered(),
-    --     documentation = cmp.config.window.bordered(),
-    -- },
-    --
     snippet = {
         expand = function(args)
             luasnip.lsp_expand(args.body)
         end,
     },
-
+    
+    mapping = cmp.mapping.preset.insert({
+        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-f>'] = cmp.mapping.scroll_docs(4),
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+        ['<CR>'] = cmp.mapping.confirm({ select = true }),
+        ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+                luasnip.expand_or_jump()
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+        ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+                cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
+            else
+                fallback()
+            end
+        end, { 'i', 's' }),
+    }),
+    
     sources = {
         { name = 'nvim_lsp', priority = 1000 },  -- LSP
         { name = 'luasnip', priority = 750 },   -- Snippets
@@ -218,3 +250,20 @@ cmp.setup({
         ghost_text = false,  -- Show future text as gray text
     }
 })
+
+-- Add LSP specific keymaps
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+    callback = function(ev)
+        -- You can configure your specific LSP keymaps here
+        -- or use whichkey.lua to set them up globally
+        
+        -- Examples of buffer-local keymaps
+        -- local opts = { buffer = ev.buf }
+        -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
+        -- vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
+    end,
+})
+
+return M
