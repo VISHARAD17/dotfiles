@@ -26,16 +26,10 @@ return {
         dependencies = {
             -- LSP completion
             'hrsh7th/cmp-nvim-lsp',
-            
-            -- Buffer completion
             'hrsh7th/cmp-buffer',
-            
-            -- Path completion
             'hrsh7th/cmp-path',
-            
-            -- Lua API completion
             'hrsh7th/cmp-nvim-lua',
-            
+
             -- Snippet engine
             {
                 'L3MON4D3/LuaSnip',
@@ -55,5 +49,4 @@ return {
             },
         },
     },
-    
 }

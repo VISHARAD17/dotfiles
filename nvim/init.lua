@@ -8,7 +8,7 @@ require('lazy-config')
 require('options')
 require('keymaps')
 require('diagnostics')
-require('lsp-config')
+-- require('lsp-config')
 require('statusline')
 
 -- cmd to refresh nvim tree on commit
