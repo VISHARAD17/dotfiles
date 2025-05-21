@@ -12,12 +12,12 @@ require('diagnostics')
 require('statusline')
 
 -- cmd to refresh nvim tree on commit
-vim.cmd([[
-  augroup NvimTreeRefreshOnCommit
-    autocmd!
-    autocmd BufWritePost * if &ft == 'gitcommit' | NvimTreeRefresh | endif
-  augroup END
-]])
+-- vim.cmd([[
+--   augroup NvimTreeRefreshOnCommit
+--     autocmd!
+--     autocmd BufWritePost * if &ft == 'gitcommit' | NvimTreeRefresh | endif
+--   augroup END
+-- ]])
 
 -- function to clear all macros
 local function clear_macros()
