@@ -1,4 +1,4 @@
---darkplus theme from lunarvim
+-- darkplus theme from lunarvim
 return {
     -- "lunarvim/darkplus.nvim",
     "askfiy/visual_studio_code",

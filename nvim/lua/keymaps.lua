@@ -48,12 +48,7 @@ keymap("v", "<S-j>", ":m '>+1<CR>gv=gv", opts) -- move line up
 keymap("v", "<S-k>", ":m '<-2<CR>gv=gv", opts) -- move line down
 
 --------------------------------- KEYMAPS for plugins ---------------------------------------------
-
-vim.keymap.set("n", "<leader>e", function()
-  require("snacks.picker").explorer()
-end, { desc = "Snacks Explorer" })
-
--- keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', setOpts("File Explorer"))
+keymap('n', '<leader>e', '<cmd>NvimTreeToggle<CR>', setOpts("File Explorer"))
 keymap('n', '<leader>kc', '<cmd>bdelete!<CR>', setOpts("kill current buffer"))
 keymap('n', '<leader>p', '<cmd>Lazy<CR>', setOpts("Plugin Manager"))
 

@@ -1,3 +1,10 @@
+
+-- Set custom highlight colors for diagnostics
+vim.api.nvim_set_hl(0, "DiagnosticError", { fg = "#ff5555", bg = "NONE" })
+vim.api.nvim_set_hl(0, "DiagnosticWarn",  { fg = "#f1fa8c", bg = "NONE" })
+vim.api.nvim_set_hl(0, "DiagnosticInfo",  { fg = "#8be9fd", bg = "NONE" })
+vim.api.nvim_set_hl(0, "DiagnosticHint",  { fg = "#50fa7b", bg = "NONE" })
+
 vim.diagnostic.config({
     virtual_text = false,
     signs = {
@@ -17,17 +24,7 @@ vim.diagnostic.config({
     },
 })
 
-local signs = {
-    Error = "✘",
-    Warn = "▲",
-    Hint = "⚑",
-    Info = "»"
-}
 
--- for type, icon in pairs(signs) do
---     local hl = "DiagnosticSign" .. type
---     vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
--- end
 
 -- dimming the color of unused variables to this color insted of chaning them to comment color
 vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#808080" })
