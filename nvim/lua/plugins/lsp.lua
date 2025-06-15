@@ -18,6 +18,9 @@ return {
             require('lsp-config')
         end
     },
+
+    -- github copilot
+    {"github/copilot.vim"},
     
     -- Autocompletion
     {
