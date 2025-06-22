@@ -17,6 +17,7 @@ opt.formatoptions = "jcroqlnt" -- tcqj
 opt.grepformat = "%f:%l:%c:%m"
 opt.grepprg = "rg --vimgrep"
 opt.ignorecase = true -- Ignore case
+
 opt.incsearch = true
 
 opt.list = true
@@ -54,7 +55,7 @@ opt.undofile = true
 -- opt.updatetime = 200 -- Save swap file and trigger CursorHold
 -- opt.wildmode = "longest:full,full" -- Command-line completion mode
 opt.winminwidth = 5 -- Minimum window width
-opt.wrap = false -- Disable line wrap
+opt.wrap = true -- Disable line wrap
 opt.linebreak = true
 -- opt.list = false
 
