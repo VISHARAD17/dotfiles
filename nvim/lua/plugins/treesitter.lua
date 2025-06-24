@@ -2,11 +2,7 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     event = { "BufReadPost", "BufNewFile", "BufWritePost" },
-    dependencies = {
-        -- Uncomment if using rainbow delimiters or autotag
-        -- { "HiPhish/rainbow-delimiters.nvim" },
-        -- { "windwp/nvim-ts-autotag" },
-    },
+    dependencies = {},
     config = function()
         local configs = require("nvim-treesitter.configs")
 
