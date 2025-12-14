@@ -1,21 +1,8 @@
-#### Neovim config
+### NEOVIM CONFIG
 
-`Plugins` :
-- Auto-pairs
-- auto tag completion
-- bigfiles
-- colorizer
-- colorscheme - darkplus from lunarvim repo
-- comment 
-- fold
-- gitsigns
-- file-operations
-- render-markdown and markdown-preview
-- tailwindcss
-- lsp
-- lualine 
-- nvim-tree
-- nvim-surround
-- telescope
-- trouble ( for showing diagnostics )
-- dap ( currently not working )
+This repo for neovim is for java, typescript, python, rust, go 
+
+target:
+- no all language servers should be triggered
+  - ex. start java --> should load java env with java18, java 8,whatever it is
+  - 

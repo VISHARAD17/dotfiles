@@ -1,54 +1,26 @@
-return {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    event = { "BufReadPost", "BufNewFile", "BufWritePost" },
-    dependencies = {},
-    config = function()
-        local configs = require("nvim-treesitter.configs")
-
-        configs.setup({
-            -- List of language parsers to ensure are installed
-            ensure_installed = {
-                "c", "cpp", "lua", "vim", "vimdoc", "query", "elixir",
-                "heex", "javascript", "typescript", "html", "dockerfile",
-                "json", "regex", "sql", "graphql", "java", "markdown",
-                "markdown_inline", "bash", "tsx", "python"
-            },
-            -- Required: Specify modules to enable (e.g., highlight, indent)
-            modules = {
-                "highlight",
-                "indent",
-                "rainbow",
-                -- Add "autotag" if enabled below
-            },
-            -- Required: Languages to ignore during auto-installation
-            ignore_install = {}, -- Empty table means no languages are ignored
-            auto_install = true, -- Automatically install missing parsers
-            sync_install = false, -- Install parsers asynchronously
-            highlight = {
-                enable = true, -- Enable syntax highlighting
-                -- Disable highlighting for large files to improve performance
-                disable = function(lang, buf)
-                    local max_filesize = 1000 * 1024 -- 1 MB
-                    local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-                    if ok and stats and stats.size > max_filesize then
-                        return true
-                    end
-                end,
-            },
-            indent = { enable = true }, -- Enable Treesitter-based indentation
-            rainbow = {
-                enable = true, -- Enable rainbow brackets (requires rainbow-delimiters.nvim or similar)
-                extended_mode = true, -- Highlight non-bracket delimiters (e.g., HTML tags)
-                max_file_lines = nil, -- No line limit for rainbow highlighting
-            },
-            -- Uncomment to enable autotag for HTML/XML/JS/TS
-            -- autotag = {
-            --     enable = true,
-            --     enable_rename = true,
-            --     enable_close = true,
-            --     filetypes = { "html", "xml", "javascript", "typescript" },
-            -- },
-        })
-    end,
+return
+{ -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    main = 'nvim-treesitter.configs', -- Sets main module to use for opts
+    -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+    opts = {
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      -- Autoinstall languages that are not installed
+      auto_install = true,
+      highlight = {
+        enable = true,
+        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+        --  If you are experiencing weird indenting issues, add the language to
+        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+        additional_vim_regex_highlighting = { 'ruby' },
+      },
+      indent = { enable = true, disable = { 'ruby' } },
+    },
+    -- There are additional nvim-treesitter modules that you can use to interact
+    -- with nvim-treesitter. You should go explore a few and see what interests you:
+    --
+    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
 }
