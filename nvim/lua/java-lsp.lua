@@ -1,5 +1,3 @@
-local config = {
-    cmd = {'~/.local/share/nvim/mason/bin/jdtls'},
-    root_dir = vim.fs.dirname(vim.fs.find({'gradlew', '.git', 'mvnw'}, { upward = true })[1]),
-}
-require('jdtls').start_or_attach(config)
+-- This file is intentionally left blank.
+-- Java LSP (jdtls) configuration is now handled by `lua/plugins/java.lua`
+-- using the `nvim-jdtls` plugin.

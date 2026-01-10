@@ -11,6 +11,8 @@ opt.clipboard = 'unnamedplus'
 opt.completeopt = "menu,menuone,noselect"
 -- opt.conceallevel = 3 -- Hide * markup for bold and italic
 opt.confirm = true -- Confirm to save changes before exiting modified buffer
+-- NOTE: cursorline can have a performance impact in large files.
+-- If you experience lag, you can disable it with `vim.opt.cursorline = false`
 opt.cursorline = true -- Enable highlighting of the current line
 opt.expandtab = true -- Use spaces instead of tabs
 opt.formatoptions = "jcroqlnt" -- tcqj
@@ -80,5 +82,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'nvim_treesitter#foldexpr()'
+-- Folding is now managed by nvim-ufo in lua/plugins/fold.lua

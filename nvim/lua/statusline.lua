@@ -43,5 +43,18 @@ function GetGitBranch()
     end
 end
 
+-- Function to get active LSP clients
+function GetLspClients()
+    local clients = vim.lsp.get_active_clients({ bufnr = 0 })
+    if #clients == 0 then
+        return "no-lsp"
+    end
+    local client_names = {}
+    for _, client in ipairs(clients) do
+        table.insert(client_names, client.name)
+    end
+    return table.concat(client_names, ", ")
+end
+
 -- Set the statusline with colorful current mode
-vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine# %f %m %=[ %{v:lua.GetGitBranch()} ] %l'
+vim.o.statusline = '%{%v:lua.ModeHighlight()%}%#StatusLine# %f %m %=[%{v:lua.GetLspClients()} | %{v:lua.GetGitBranch()} ] %l'
