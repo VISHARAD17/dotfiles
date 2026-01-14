@@ -69,38 +69,9 @@ keymap('n', '<leader>gs', '<cmd>Telescope git_status<CR>', setOpts("git status")
 keymap('n', '<leader>gb', '<cmd>Telescope git_branches<CR>', setOpts("all_branches"))
 keymap('n', '<leader>gc', '<cmd>Telescope git_commits<CR>', setOpts("all_commits"))
 
--- LSP mappings
-keymap('n', '<leader>lD', '<cmd>lua vim.lsp.buf.declaration()<CR>', setOpts("Declaration"))
-keymap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<CR>', setOpts("Definition or source"))
-keymap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.rename()<CR>', setOpts("Rename"))
-keymap('n', '<leader>lg', '<cmd>lua vim.lsp.buf.references()<CR>', setOpts("Go to references"))
-keymap('n', '<leader>ls', '<cmd>Telescope lsp_document_symbols<CR>', setOpts("Document Symbols"))
-keymap('n', '<leader>li', '<cmd>LspInfo<CR>', setOpts("Info"))
-keymap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<CR>', setOpts("Code action"))
-keymap('n', '<leader>lk', '<cmd>lua vim.lsp.buf.hover()<CR>', setOpts("Show documentation"))
-keymap('n', '<leader>lK', '<cmd>lua vim.lsp.buf.signature_help()<CR>', setOpts("signature info"))
-keymap('n', '<leader>fr', '<cmd>lua require("telescope.builtin").lsp_references()<cr>', setOpts("LSP references"))
+-- LSP keymaps are now defined in lsp-config.lua in the on_attach function.
 
--- File Search mappings ( Telescope )
-keymap('n', '<leader>ff', "<cmd>lua require('telescope.builtin').find_files()<CR>", setOpts("Find files"))
-keymap('n', '<leader>ft', "<cmd>lua require('telescope.builtin').live_grep()<CR>", setOpts("Find text"))
-keymap('n', '<leader>fo', '<cmd>Telescope oldfiles<CR>', setOpts("Recent Files"))
-keymap('n', '<leader>fh', "<cmd>lua require('telescope.builtin').help_tags()<CR>", setOpts("help tags"))
-keymap('n', '<leader>fk', '<cmd>Telescope keymaps<CR>', setOpts("Keymaps"))
--- keymap('n', '<leader>fb', "<cmd>lua require('telescope.builtin').buffers()<CR>", setOpts("search buffers"))
-keymap('n', '<leader>fd', "<cmd>lua require('telescope.builtin').find_files({cwd = vim.fn.expand('%:p:h')})<CR>", { desc = "File " })
 
-vim.keymap.set('n', '<leader>fb', function()
-    require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{
-        previewer = false;
-    })
-end, {desc = "Find open buffers"})
-
-vim.keymap.set('n', '<leader>fc', function()
-    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-        previewer = false,
-    })
-end, { desc = '[F]ind [C]urrent file' })
 
 -- Manage buffers
 vim.api.nvim_create_user_command('BufCurOnly', function()
@@ -110,3 +81,12 @@ vim.api.nvim_create_user_command('BufCurOnly', function()
 end, {})
 
 keymap('n', '<leader>ko', ':BufCurOnly<CR>', setOpts("kill all buff except cur")) -- kill all bufferes, except the current one
+
+
+-- copilot mappings
+ vim.keymap.set('i', '<C-y>', 'copilot#Accept("\\<CR>")', {
+          expr = true,
+          replace_keycodes = false
+        })
+vim.g.copilot_no_tab_map = true
+
