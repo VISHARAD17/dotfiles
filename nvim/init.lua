@@ -1,40 +1,78 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
 
---- import everything ---
-require('lazy-config')
-require('options')
-require('keymaps')
-require('diagnostics')
-require('lsp-config')
-require('statusline')
---
--- cmd to refresh nvim tree on commit
--- vim.cmd([[
---   augroup NvimTreeRefreshOnCommit
---     autocmd!
---     autocmd BufWritePost * if &ft == 'gitcommit' | NvimTreeRefresh | endif
---   augroup END
--- ]])
+require("config.lazy")
+require("config.options")
 
--- function to clear all macros
-local function clear_macros()
-    for i = 97, 122 do  -- ASCII values for 'a' to 'z'
-        vim.fn.setreg(string.char(i), '')
-    end
-    for i = 65, 90 do  -- ASCII values for 'A' to 'Z'
-        vim.fn.setreg(string.char(i), '')
-    end
-    for i = 48, 57 do  -- ASCII values for '0' to '9'
-        vim.fn.setreg(string.char(i), '')
-    end
-    vim.fn.setreg('-', '')
-    vim.fn.setreg('/', '')
-    vim.fn.setreg('"', '')
-    vim.fn.setreg('*', '')
-    vim.fn.setreg('+', '')
+-- lsp setup
+vim.lsp.config("*", {
+  root_markers = { ".git" },
+  capabilities = vim.lsp.protocol.make_client_capabilities(),
+})
+
+-- Enable Java, Lua, JSON, and Markdown LSPs
+local servers = { "jdtls", "lua_ls", "jsonls", "marksman" }
+
+for _, server in ipairs(servers) do
+  vim.lsp.enable(server)
 end
 
-vim.api.nvim_create_user_command('ClearMacros', clear_macros, {})
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local opts = { buffer = args.buf }
+    local map = vim.keymap.set
+
+    -- --- Navigation ---
+    map('n', 'gd', vim.lsp.buf.definition, { desc = "LSP: [G]o to [D]efinition", unpack(opts) })
+    map('n', 'gr', vim.lsp.buf.references, { desc = "LSP: [G]o to [R]eferences", unpack(opts) })
+    map('n', 'gI', vim.lsp.buf.implementation, { desc = "LSP: [G]o to [I]mplementation", unpack(opts) })
+    map('n', 'gy', vim.lsp.buf.type_definition, { desc = "LSP: T[y]pe Definition", unpack(opts) })
+    map('n', 'gO', vim.lsp.buf.document_symbol, { desc = "LSP: Symbols Outline", unpack(opts) })
+
+    -- --- Documentation & Signature ---
+    map('n', 'K', vim.lsp.buf.hover, { desc = "LSP: Hover Documentation", unpack(opts) })
+    map('i', '<C-s>', vim.lsp.buf.signature_help, { desc = "LSP: Signature Help", unpack(opts) })
+
+    -- --- Actions ---
+    map('n', '<leader>rn', vim.lsp.buf.rename, { desc = "LSP: [R]e[n]ame Symbol", unpack(opts) })
+    map({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, { desc = "LSP: [C]ode [A]ction", unpack(opts) })
+    
+    -- --- Formatting ---
+    map('n', '<leader>f', function()
+      vim.lsp.buf.format { async = true }
+    end, { desc = "LSP: [F]ormat Buffer", unpack(opts) })
+  end,
+})
+
+-- --- Diagnostics Configuration ---
+vim.diagnostic.config({
+  virtual_text = false,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+  
+  -- --- Explicit Diagnostic Levels ---
+  severity = {
+    -- Show HINT and up (includes WARN, INFO, ERROR)
+    min = vim.diagnostic.severity.HINT, 
+    max = vim.diagnostic.severity.ERROR,
+  },
+  
+  float = {
+    focused = false,
+    style = "minimal",
+    border = "rounded",
+    source = "always",
+    header = "",
+    prefix = "",
+  },
+})
+
+-- leader + d to show error in a floating window
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Show line diagnostics" })
+
+-- Optional: Navigate between errors quickly
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous error" })
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next error" })
