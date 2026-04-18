@@ -13,6 +13,10 @@
       "rev": "b9624aa012ddcbae9e79964bfd30cc1fbe3cf263",
       "src": "https://github.com/junegunn/fzf.vim"
     },
+    "mini.files": {
+      "rev": "e8db416c9f5dbce70f5501da28263d45c0a4df6b",
+      "src": "https://github.com/echasnovski/mini.files"
+    },
     "mini.pick": {
       "rev": "437d44eb57312f23e6b931704694fc294922cd88",
       "src": "https://github.com/echasnovski/mini.pick"
@@ -29,6 +33,10 @@
       "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
+    },
+    "obsidian.nvim": {
+      "rev": "94871e4ba1d737709723d8ff7d38ba399c1b51d5",
+      "src": "https://github.com/obsidian-nvim/obsidian.nvim"
     },
     "oil.nvim": {
       "rev": "0fcc83805ad11cf714a949c98c605ed717e0b83e",

@@ -99,6 +99,9 @@ vim.pack.add({
 
   -- Mini.pick - fast fuzzy finder
   "https://github.com/echasnovski/mini.pick",
+
+  -- Mini.files - file explorer
+  "https://github.com/echasnovski/mini.files",
 })
 
 -- ── 3. COLORSCHEME ───────────────────────────────────────────────────────────
@@ -498,12 +501,44 @@ if pick_ok then
   
   map("n", "<leader>f", "<cmd>Pick files<cr>", { desc = "Find Files" })
   map("n", "<C-p>", "<cmd>Pick files<cr>", { desc = "Find Files" })
+  map("n", "<leader>c", function()
+    local dir = vim.fn.expand("%:p:h")
+    vim.cmd("lcd " .. dir)
+    require("mini.pick").builtin.files()
+  end, { desc = "Find Files (current file dir)" })
   map("n", "<leader>b", "<cmd>Pick buffers<cr>", { desc = "Find Buffers" })
   map("n", "<leader>g", "<cmd>Pick grep_live<cr>", { desc = "Live Grep" })
 else
   -- Fallback
   map("n", "<leader>f", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
   map("n", "<C-p>", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
+end
+
+-- ── MINI.FILES ───────────────────────────────────────────────────────────────
+local mf_ok, mfiles = pcall(require, "mini.files")
+if mf_ok then
+  mfiles.setup({
+    windows = {
+      preview = false,
+    },
+  })
+  vim.api.nvim_create_autocmd("User", {
+    pattern = "MiniFilesBufferCreate",
+    callback = function(args)
+      vim.keymap.set("n", "<CR>", function()
+        local entry = mfiles.get_fs_entry()
+        if entry and entry.fs_type == "file" then
+          mfiles.close()
+          vim.cmd("edit " .. vim.fn.fnameescape(entry.path))
+        end
+      end, { buffer = args.data.buf_id })
+    end,
+  })
+  map("n", "<leader>e", function()
+    if not mfiles.close() then
+      mfiles.open(vim.fn.expand("%:p:h"))
+    end
+  end, { desc = "File explorer" })
 end
 
 -- ── 11. STATUSLINE (minimal, no plugin needed) ───────────────────────────────
