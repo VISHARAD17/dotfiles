@@ -30,7 +30,7 @@ local opt = vim.opt
 -- UI
 opt.number         = true
 opt.relativenumber = false
-opt.signcolumn     = "yes"        -- always show; prevents layout shift
+opt.signcolumn     = "yes:1"      -- fixed width; prevents layout shift
 opt.cursorline     = true
 opt.termguicolors  = true
 opt.laststatus     = 2
@@ -40,15 +40,14 @@ opt.scrolloff      = 8
 opt.sidescrolloff  = 8
 
 -- Performance
-opt.updatetime     = 100          -- faster CursorHold / diagnostics
+opt.updatetime     = 250          -- diagnostic update frequency (was 100ms)
 opt.timeoutlen     = 300
 opt.redrawtime     = 1500
 opt.ttyfast        = true
 opt.lazyredraw     = false        -- keep false; true breaks floating windows
-opt.synmaxcol      = 0           -- no regex syntax (treesitter handles it)
+opt.synmaxcol      = 240          -- limit syntax highlighting per line
 
--- Enable syntax highlighting (required for treesitter to work)
-vim.cmd("syntax enable")
+vim.cmd("syntax on")
 
 -- Editing
 opt.expandtab      = true
@@ -59,6 +58,13 @@ opt.wrap           = false
 opt.breakindent    = true
 opt.undofile       = true
 opt.undolevels     = 10000
+
+-- Cursor
+opt.guicursor = "a:blinkwait0-blinkoff0-blinkon0,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
+
+-- Spell checking (disabled globally for perf; enable per-filetype if needed)
+opt.spell = false
+opt.spelllang = { "en_us" }
 
 -- Search
 opt.ignorecase     = true
@@ -160,6 +166,7 @@ vim.lsp.config("*", { capabilities = capabilities })
 -- Adjust JAVA8_HOME / JAVA17_HOME to match your local install paths.
 
 local JAVA21_HOME = "/Library/Java/JavaVirtualMachines/amazon-corretto-21.jdk/Contents/Home"
+local LOMBOK_JAR = "/Users/visharad/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.42/8365263844ebb62398e0dc33057ba10ba472d3b8/lombok-1.18.42.jar"
 
 vim.lsp.config("jdtls", {
   -- jdtls wrapper script must be on PATH; it handles the java invocation.
@@ -174,6 +181,7 @@ vim.lsp.config("jdtls", {
     -- Faster incremental compilation
     "--jvm-arg=-XX:+UseG1GC",
     "--jvm-arg=-XX:+UseStringDeduplication",
+    "--jvm-arg=-javaagent:" .. LOMBOK_JAR,
   },
 
   -- Root markers: jdtls starts one server per project root
@@ -224,9 +232,19 @@ vim.lsp.config("jdtls", {
         insertSpaces = true,
       },
 
-      -- IntelliSense inlay hints
+      -- IntelliSense inlay hints (disabled for performance)
       inlayHints = {
-        parameterNames = { enabled = "all" },
+        parameterNames = { enabled = "none" },
+      },
+
+      -- Show warnings for unused variables/fields/params
+      diagnostics = {
+        enable = true,
+        unused = {
+          variable = "warning",
+          field = "warning",
+          parameter = "warning",
+        },
       },
 
       -- Save actions
@@ -319,7 +337,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("n", "<leader>rn", vim.lsp.buf.rename,           "Rename Symbol")
     map("n", "<leader>ca", vim.lsp.buf.code_action,      "Code Action")
     map("v", "<leader>ca", vim.lsp.buf.code_action,      "Code Action (visual)")
-    map("n", "<leader>f",  function()
+    map("n", "<leader>lf",  function()
       vim.lsp.buf.format({ async = true })
     end, "Format Buffer")
 
@@ -337,13 +355,9 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- ── 7. DIAGNOSTICS ───────────────────────────────────────────────────────────
--- Disable diagnostics completely
+-- Only signs and underline (no virtual text for performance)
 vim.diagnostic.config({
-  virtual_text    = {
-    spacing = 4,
-    source  = "if_many",
-    prefix  = "●",
-  },
+  virtual_text    = false,        -- disabled for performance
   signs           = true,
   underline       = true,
   update_in_insert = false,       -- do NOT update diagnostics while typing
@@ -364,6 +378,14 @@ for type, icon in pairs(signs) do
   local hl = "DiagnosticSign" .. type
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
+
+-- <Space>cd → current buffer diagnostics
+vim.keymap.set("n", "<leader>cd", function()
+  local diags = vim.diagnostic.get(0)
+  local items = vim.diagnostic.toqflist(diags)
+  vim.fn.setqflist({}, " ", { title = "Current Buffer Diagnostics", items = items })
+  vim.cmd("copen")
+end, { desc = "Show current buffer diagnostics in quickfix", silent = true })
 
 -- <Space>d → show current buffer diagnostics in a quickfix list
 -- Uses vim.diagnostic.setqflist() — available natively, no plugin needed.
@@ -394,38 +416,93 @@ end, { desc = "Show workspace diagnostics in quickfix", silent = true })
 -- Navigate diagnostics inline
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show Diagnostic Float" })
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show Line Diagnostic" })
 
 -- ── 8. COMPLETION (blink.cmp — fast Rust-powered, wraps native complete) ─────
+-- ── 8. COMPLETION (Neovim built-in) ────────────────────────────────────────
+-- VSCode-like completion UI with borders and better formatting
+
+-- Completion menu appearance
+vim.opt.pumblend = 10  -- slight transparency
+vim.opt.pumheight = 15 -- max items shown
+
+-- Bordered floating windows for LSP
+vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
+  config = config or {}
+  config.border = "rounded"
+  config.max_width = 80
+  return vim.lsp.handlers.hover(_, result, ctx, config)
+end
+
+vim.lsp.handlers["textDocument/signatureHelp"] = function(_, result, ctx, config)
+  config = config or {}
+  config.border = "rounded"
+  return vim.lsp.handlers.signature_help(_, result, ctx, config)
+end
+
+-- Customize floating preview windows
+local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+  opts = opts or {}
+  opts.border = opts.border or "rounded"
+  opts.max_width = opts.max_width or 80
+  return orig_util_open_floating_preview(contents, syntax, opts, ...)
+end
+
+-- Keymaps: Ctrl+Space to trigger, Ctrl+n/p to navigate, Enter to select
+vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", { desc = "Trigger completion" })
+vim.keymap.set("i", "<C-n>", function()
+  return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-n>"
+end, { expr = true, desc = "Next completion" })
+vim.keymap.set("i", "<C-p>", function()
+  return vim.fn.pumvisible() == 1 and "<C-p>" or "<C-p>"
+end, { expr = true, desc = "Prev completion" })
+vim.keymap.set("i", "<CR>", function()
+  return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>"
+end, { expr = true, desc = "Accept completion" })
+vim.keymap.set("i", "<C-e>", function()
+  return vim.fn.pumvisible() == 1 and "<C-e>" or "<C-e>"
+end, { expr = true, desc = "Close completion" })
+
+-- ── BLINK.CMP (commented out - uncomment to use) ─────────────────────────────
+--[[
 local ok, blink = pcall(require, "blink.cmp")
 if ok then
   blink.setup({
     keymap = {
       preset = "default",
-      ["<Tab>"]   = { "select_next", "fallback" },
-      ["<S-Tab>"] = { "select_prev", "fallback" },
-      ["<CR>"]    = { "accept", "fallback" },
-      ["<C-e>"]   = { "hide" },
-      ["<C-d>"]   = { "scroll_documentation_down" },
-      ["<C-u>"]   = { "scroll_documentation_up" },
+      ["<CR>"] = { "accept", "fallback" },
+      ["<C-n>"] = { "select_next", "fallback" },
+      ["<C-p>"] = { "select_prev", "fallback" },
+      ["<C-y>"] = { "accept" },
+      ["<C-e>"] = { "hide", "fallback" },
+    },
+    appearance = {
+      use_nvim_cmp_as_default = true,
+      nerd_font_variant = "mono",
     },
     completion = {
+      trigger = {
+        show_on_insert_on_trigger_character = true,
+      },
       menu = {
         draw = {
-          -- treesitter = { "lsp" },  -- use treesitter for menu highlighting
+          columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
         },
       },
-      documentation = { auto_show = true, auto_show_delay_ms = 200 },
-      ghost_text    = { enabled = true },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 200,
+      },
+      ghost_text = { enabled = true },
     },
     sources = {
       default = { "lsp", "path", "buffer" },
     },
-    -- Force Lua implementation — avoids pre-built binary download warning
-    -- The Lua fallback is perfectly fast for most use cases
-    fuzzy = { implementation = "lua" },
+    signature = { enabled = true },
   })
 end
+--]]
 
 -- ── 9. JAVA-SPECIFIC FILETYPE SETTINGS ───────────────────────────────────────
 vim.api.nvim_create_autocmd("FileType", {
@@ -499,7 +576,7 @@ if pick_ok then
     }
   })
   
-  map("n", "<leader>f", "<cmd>Pick files<cr>", { desc = "Find Files" })
+  map("n", "<leader>ff", "<cmd>Pick files<cr>", { desc = "Find Files" })
   map("n", "<C-p>", "<cmd>Pick files<cr>", { desc = "Find Files" })
   map("n", "<leader>c", function()
     local dir = vim.fn.expand("%:p:h")
@@ -510,7 +587,7 @@ if pick_ok then
   map("n", "<leader>g", "<cmd>Pick grep_live<cr>", { desc = "Live Grep" })
 else
   -- Fallback
-  map("n", "<leader>f", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
+  map("n", "<leader>ff", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
   map("n", "<C-p>", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
 end
 
@@ -542,13 +619,16 @@ if mf_ok then
 end
 
 -- ── 11. STATUSLINE (minimal, no plugin needed) ───────────────────────────────
-local function git_branch()
-  local branch = vim.fn.system("git branch --show-current 2>/dev/null | tr -d '\n'")
-  if branch and branch ~= "" then
-    return " " .. branch
-  end
-  return ""
+-- Cache git branch (shelling out on every statusline redraw kills scroll perf)
+local _git_branch_cache = ""
+local _git_branch_timer = vim.uv.new_timer()
+local function refresh_git_branch()
+  vim.system({"git", "branch", "--show-current"}, { text = true }, function(obj)
+    _git_branch_cache = (obj.stdout or ""):gsub("%s+$", "")
+  end)
 end
+refresh_git_branch()
+_git_branch_timer:start(0, 5000, vim.schedule_wrap(refresh_git_branch))
 
 _G.statusline = function()
   local mode_map = {
@@ -557,13 +637,14 @@ _G.statusline = function()
     R = "REPLACE", t = "TERMINAL",
   }
   local m = mode_map[vim.fn.mode()] or vim.fn.mode()
+  local branch = _git_branch_cache ~= "" and (" " .. _git_branch_cache) or ""
   return table.concat({
     " " .. m .. " ",
-    "%f",              -- filename
-    "%m%r",            -- modified / readonly
-    "%=",              -- right-align
-    git_branch(),
-  }, "  ")
+    "%f",
+    "%m%r",
+    "%=",
+    branch,
+  }, " ")
 end
 
 opt.statusline = "%!v:lua.statusline()"
