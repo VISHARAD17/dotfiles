@@ -82,9 +82,8 @@ opt.splitright     = true
 -- Completion (builtin, 0.11+)
 opt.completeopt    = { "menuone", "noinsert", "noselect", "popup" }
 
--- Folding via treesitter (0.10+)
-opt.foldmethod     = "expr"
-opt.foldexpr       = "v:lua.vim.treesitter.foldexpr()"
+-- Folding (manual = no computation on scroll)
+opt.foldmethod     = "manual"
 opt.foldlevel      = 99           -- open all folds by default
 opt.foldlevelstart = 99
 
@@ -115,20 +114,27 @@ vim.pack.add({
 vim.opt.termguicolors = true
 vim.cmd.colorscheme("fleet_dark")
 
+-- Brighter cursorline
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#2e2e2e" })
+vim.api.nvim_set_hl(0, "CursorLineNr", { fg = "#ffffff", bold = true })
+
 -- ── 4. TREESITTER ────────────────────────────────────────────────────────────
 
--- Force treesitter highlighting for all supported filetypes
-vim.api.nvim_create_autocmd({"BufRead", "BufNewFile"}, {
-  callback = function()
-    local ft = vim.bo.filetype
+-- Force treesitter highlighting for supported filetypes (skip large files)
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function(args)
+    local ft = vim.bo[args.buf].filetype
     if ft == "" then return end
-    
-    vim.schedule(function()
-      local lang = vim.treesitter.language.get_lang(ft)
-      if lang and pcall(vim.treesitter.language.add, lang) then
-        pcall(vim.treesitter.start, 0, lang)
-      end
-    end)
+
+    -- Skip large files (>1MB) for performance
+    local max_filesize = 1024 * 1024
+    local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(args.buf))
+    if ok and stats and stats.size > max_filesize then return end
+
+    local lang = vim.treesitter.language.get_lang(ft)
+    if lang and pcall(vim.treesitter.language.add, lang) then
+      pcall(vim.treesitter.start, args.buf, lang)
+    end
   end,
 })
 
@@ -172,7 +178,7 @@ vim.lsp.config("jdtls", {
   -- jdtls wrapper script must be on PATH; it handles the java invocation.
   -- If you installed manually without the wrapper, replace with full java cmd.
   cmd = {
-    "jdtls",
+    "env", "JAVA_HOME=" .. JAVA21_HOME, "jdtls",
     -- Give jdtls plenty of heap for large repos; tune to your machine
     "--jvm-arg=-Xms512m",
     "--jvm-arg=-Xmx4g",
@@ -211,7 +217,7 @@ vim.lsp.config("jdtls", {
       },
 
       -- Performance: disable scanning things we don't need
-      maxConcurrentBuilds = 4,
+      maxConcurrentBuilds = 8,
 
       import = {
         gradle = { enabled = true },
@@ -318,6 +324,7 @@ vim.lsp.enable("lua_ls")
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
     local buf  = args.buf
+    vim.bo[buf].omnifunc = "v:lua.vim.lsp.omnifunc"
     local map  = function(mode, lhs, rhs, desc)
       vim.keymap.set(mode, lhs, rhs, { buffer = buf, desc = desc, silent = true })
     end
@@ -351,6 +358,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- LSP control (0.12 new :lsp command)
     map("n", "<leader>li", "<cmd>checkhealth vim.lsp<cr>",  "LSP Info")
     map("n", "<leader>lr", "<cmd>lsp restart<cr>",          "LSP Restart")
+
+    -- Disable semantic tokens (treesitter handles highlighting)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    if client then
+      client.server_capabilities.semanticTokensProvider = nil
+    end
   end,
 })
 
@@ -382,36 +395,77 @@ end
 -- <Space>cd → current buffer diagnostics
 vim.keymap.set("n", "<leader>cd", function()
   local diags = vim.diagnostic.get(0)
-  local items = vim.diagnostic.toqflist(diags)
-  vim.fn.setqflist({}, " ", { title = "Current Buffer Diagnostics", items = items })
-  vim.cmd("copen")
-end, { desc = "Show current buffer diagnostics in quickfix", silent = true })
+  if #diags == 0 then
+    vim.notify("No diagnostics in current buffer", vim.log.levels.INFO)
+    return
+  end
+  
+  local items = {}
+  for _, d in ipairs(diags) do
+    local severity = vim.diagnostic.severity[d.severity]
+    table.insert(items, string.format("[%s] Line %d: %s", severity, d.lnum + 1, d.message))
+  end
+  
+  vim.ui.select(items, {
+    prompt = "Buffer Diagnostics:",
+    format_item = function(item) return item end,
+  }, function(_, idx)
+    if idx then
+      vim.api.nvim_win_set_cursor(0, {diags[idx].lnum + 1, diags[idx].col})
+    end
+  end)
+end, { desc = "Show current buffer diagnostics", silent = true })
 
--- <Space>d → show current buffer diagnostics in a quickfix list
--- Uses vim.diagnostic.setqflist() — available natively, no plugin needed.
--- In 0.12 it also supports a `format` function for custom display.
+-- <Space>d → show current buffer diagnostics
 vim.keymap.set("n", "<leader>d", function()
-  vim.diagnostic.setqflist({
-    open   = true,
-    title  = "Buffer Diagnostics",
-    severity = nil,              -- all severities; set e.g. ERROR to filter
-    format = function(diag)
-      return string.format("[%s] %s", vim.diagnostic.severity[diag.severity], diag.message)
-    end,
-  })
-end, { desc = "Show diagnostics in quickfix", silent = true })
+  local diags = vim.diagnostic.get(0)
+  if #diags == 0 then
+    vim.notify("No diagnostics in current buffer", vim.log.levels.INFO)
+    return
+  end
+  
+  local items = {}
+  for _, d in ipairs(diags) do
+    local severity = vim.diagnostic.severity[d.severity]
+    table.insert(items, string.format("[%s] Line %d: %s", severity, d.lnum + 1, d.message))
+  end
+  
+  vim.ui.select(items, {
+    prompt = "Buffer Diagnostics:",
+    format_item = function(item) return item end,
+  }, function(_, idx)
+    if idx then
+      vim.api.nvim_win_set_cursor(0, {diags[idx].lnum + 1, diags[idx].col})
+    end
+  end)
+end, { desc = "Show diagnostics", silent = true })
 
 -- <Space>D → workspace-wide diagnostics
 vim.keymap.set("n", "<leader>D", function()
-  vim.diagnostic.setqflist({
-    open       = true,
-    title      = "Workspace Diagnostics",
-    namespace  = nil,            -- all namespaces
-    format = function(diag)
-      return string.format("[%s] %s", vim.diagnostic.severity[diag.severity], diag.message)
-    end,
-  })
-end, { desc = "Show workspace diagnostics in quickfix", silent = true })
+  local diags = vim.diagnostic.get()
+  if #diags == 0 then
+    vim.notify("No diagnostics in workspace", vim.log.levels.INFO)
+    return
+  end
+  
+  local items = {}
+  for _, d in ipairs(diags) do
+    local severity = vim.diagnostic.severity[d.severity]
+    local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(d.bufnr), ":~:.")
+    table.insert(items, string.format("[%s] %s:%d: %s", severity, filename, d.lnum + 1, d.message))
+  end
+  
+  vim.ui.select(items, {
+    prompt = "Workspace Diagnostics:",
+    format_item = function(item) return item end,
+  }, function(_, idx)
+    if idx then
+      local d = diags[idx]
+      vim.api.nvim_set_current_buf(d.bufnr)
+      vim.api.nvim_win_set_cursor(0, {d.lnum + 1, d.col})
+    end
+  end)
+end, { desc = "Show workspace diagnostics", silent = true })
 
 -- Navigate diagnostics inline
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
@@ -539,6 +593,11 @@ map("n", "<S-l>", "<cmd>bnext<cr>",     { desc = "Next Buffer" })
 -- Clear search highlight
 map("n", "<Esc>", "<cmd>noh<cr><Esc>", { desc = "Clear Search Highlight" })
 
+-- Always center search results
+map("n", "n", "nzz", { silent = true })
+map("n", "N", "Nzz", { silent = true })
+map("n", "*", "*zz", { silent = true })
+
 -- Stay in indent mode when indenting in visual
 map("v", "<", "<gv")
 map("v", ">", ">gv")
@@ -621,14 +680,42 @@ end
 -- ── 11. STATUSLINE (minimal, no plugin needed) ───────────────────────────────
 -- Cache git branch (shelling out on every statusline redraw kills scroll perf)
 local _git_branch_cache = ""
-local _git_branch_timer = vim.uv.new_timer()
+local _git_branch_timer = nil
+
 local function refresh_git_branch()
-  vim.system({"git", "branch", "--show-current"}, { text = true }, function(obj)
-    _git_branch_cache = (obj.stdout or ""):gsub("%s+$", "")
+  vim.system({"git", "rev-parse", "--is-inside-work-tree"}, { text = true }, function(obj)
+    if obj.code == 0 then
+      vim.system({"git", "branch", "--show-current"}, { text = true }, function(result)
+        _git_branch_cache = (result.stdout or ""):gsub("%s+$", "")
+      end)
+    else
+      _git_branch_cache = ""
+      if _git_branch_timer then
+        _git_branch_timer:stop()
+        _git_branch_timer = nil
+      end
+    end
   end)
 end
-refresh_git_branch()
-_git_branch_timer:start(0, 5000, vim.schedule_wrap(refresh_git_branch))
+
+-- Only start timer if in git repo
+vim.defer_fn(function()
+  refresh_git_branch()
+  if _git_branch_cache ~= "" or vim.fn.isdirectory(".git") == 1 then
+    _git_branch_timer = vim.uv.new_timer()
+    _git_branch_timer:start(0, 5000, vim.schedule_wrap(refresh_git_branch))
+  end
+end, 100)
+
+-- Stop timer on exit
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  callback = function()
+    if _git_branch_timer then
+      _git_branch_timer:stop()
+      _git_branch_timer:close()
+    end
+  end,
+})
 
 _G.statusline = function()
   local mode_map = {
@@ -638,13 +725,7 @@ _G.statusline = function()
   }
   local m = mode_map[vim.fn.mode()] or vim.fn.mode()
   local branch = _git_branch_cache ~= "" and (" " .. _git_branch_cache) or ""
-  return table.concat({
-    " " .. m .. " ",
-    "%f",
-    "%m%r",
-    "%=",
-    branch,
-  }, " ")
+  return " " .. m .. "  %f %m%r%= " .. branch .. " "
 end
 
 opt.statusline = "%!v:lua.statusline()"
