@@ -131,14 +131,20 @@ Minimal `pom.xml`:
 ## Ctrl+Space Completion Not Working
 
 ### Root Cause
-`omnifunc` was never set, so `<C-x><C-o>` had nothing to call.
+macOS was intercepting `Ctrl+Space` via **Input Sources** keyboard shortcut before kitty received it.
 
 ### Fix
-Add this inside the `LspAttach` autocmd callback in `init.lua`:
+**System Settings → Keyboard → Keyboard Shortcuts → Input Sources** — disable `^Space` binding.
+
+### Keymap in init.lua
+Use `<C-Space>` (not `<NUL>`):
+```lua
+vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", { desc = "Trigger completion" })
+```
+
+### Also required
+`omnifunc` must be set in `LspAttach`:
 ```lua
 vim.bo[buf].omnifunc = "v:lua.vim.lsp.omnifunc"
 ```
-
-### Notes
-- kitty config already correctly passes `Ctrl+Space` as `\x00` — not a terminal issue
-- Verify with `:set omnifunc?` — should show `v:lua.vim.lsp.omnifunc` when LSP is attached
+Verify with `:set omnifunc?` — should show `v:lua.vim.lsp.omnifunc` when LSP is attached.
