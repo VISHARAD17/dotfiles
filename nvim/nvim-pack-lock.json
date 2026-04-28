@@ -5,6 +5,10 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "'main'"
     },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "https://github.com/sindrets/diffview.nvim"
+    },
     "fzf": {
       "rev": "06e70570e2088605d61f18b127356e5680f7f599",
       "src": "https://github.com/junegunn/fzf"

@@ -4,7 +4,7 @@
 -- No legacy syntax highlighting. No lazy.nvim. No require('lspconfig').setup()
 -- =============================================================================
 
--- Set leader key FIRST
+-- Set leader key FIRST ( change )
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -107,6 +107,9 @@ vim.pack.add({
 
   -- Mini.files - file explorer
   "https://github.com/echasnovski/mini.files",
+
+  -- Diffview: side-by-side git diff with file history
+  "https://github.com/sindrets/diffview.nvim",
 })
 
 -- ── 3. COLORSCHEME ───────────────────────────────────────────────────────────
@@ -617,6 +620,19 @@ map("n", "]q",         "<cmd>cnext<cr>",  { desc = "Next Quickfix" })
 -- Save / Quit
 map({ "n", "i" }, "<C-s>", "<cmd>w<cr><Esc>", { desc = "Save" })
 map("n",          "<leader>q", "<cmd>q<cr>",  { desc = "Quit" })
+
+-- ── DIFFVIEW ─────────────────────────────────────────────────────────────────
+map("n", "<leader>gd", "<cmd>DiffviewOpen<cr>",                    { desc = "Diff all changed files" })
+map("n", "<leader>gf", "<cmd>DiffviewOpen -- %<cr>",               { desc = "Diff current file vs HEAD" })
+map("n", "<leader>gh", "<cmd>DiffviewFileHistory %<cr>",           { desc = "File history" })
+map("n", "<leader>gx", "<cmd>DiffviewClose<cr>",                   { desc = "Close diffview" })
+map("n", "<leader>gb", function()
+  local current = vim.fn.system("git branch --show-current"):gsub("%s+$", "")
+  local b2 = vim.fn.input("Compare with branch: ")
+  if b2 ~= "" then
+    vim.cmd("DiffviewOpen " .. current .. ".." .. b2 .. " -- %")
+  end
+end, { desc = "Diff current file: current branch vs branch" })
 
 -- ── MINI.PICK FUZZY FINDER ───────────────────────────────────────────────────
 local pick_ok, pick = pcall(require, "mini.pick")
