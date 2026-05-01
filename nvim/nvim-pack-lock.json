@@ -13,6 +13,10 @@
       "rev": "06e70570e2088605d61f18b127356e5680f7f599",
       "src": "https://github.com/junegunn/fzf"
     },
+    "fzf-lua": {
+      "rev": "b437bafc981a180d609bb4092c56ce8999f7a2c4",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
     "fzf.vim": {
       "rev": "b9624aa012ddcbae9e79964bfd30cc1fbe3cf263",
       "src": "https://github.com/junegunn/fzf.vim"

@@ -102,11 +102,11 @@ vim.pack.add({
   -- Colorscheme (fast, pure Lua, treesitter-aware)
   "https://github.com/folke/tokyonight.nvim",
 
-  -- Mini.pick - fast fuzzy finder
-  "https://github.com/echasnovski/mini.pick",
+  -- fzf-lua - fast fuzzy finder
+  "https://github.com/ibhagwan/fzf-lua",
 
-  -- Mini.files - file explorer
-  "https://github.com/echasnovski/mini.files",
+  -- oil.nvim - file explorer
+  "https://github.com/stevearc/oil.nvim",
 
   -- Diffview: side-by-side git diff with file history
   "https://github.com/sindrets/diffview.nvim",
@@ -475,74 +475,27 @@ vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" }
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
 vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "Show Line Diagnostic" })
 
--- ── 8. COMPLETION (blink.cmp — fast Rust-powered, wraps native complete) ─────
--- ── 8. COMPLETION (Neovim built-in) ────────────────────────────────────────
--- VSCode-like completion UI with borders and better formatting
-
--- Completion menu appearance
-vim.opt.pumblend = 10  -- slight transparency
-vim.opt.pumheight = 15 -- max items shown
-
--- Bordered floating windows for LSP
-vim.lsp.handlers["textDocument/hover"] = function(_, result, ctx, config)
-  config = config or {}
-  config.border = "rounded"
-  config.max_width = 80
-  return vim.lsp.handlers.hover(_, result, ctx, config)
-end
-
-vim.lsp.handlers["textDocument/signatureHelp"] = function(_, result, ctx, config)
-  config = config or {}
-  config.border = "rounded"
-  return vim.lsp.handlers.signature_help(_, result, ctx, config)
-end
-
--- Customize floating preview windows
-local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
-  opts = opts or {}
-  opts.border = opts.border or "rounded"
-  opts.max_width = opts.max_width or 80
-  return orig_util_open_floating_preview(contents, syntax, opts, ...)
-end
-
--- Keymaps: Ctrl+Space to trigger, Ctrl+n/p to navigate, Enter to select
-vim.keymap.set("i", "<C-Space>", "<C-x><C-o>", { desc = "Trigger completion" })
-vim.keymap.set("i", "<C-n>", function()
-  return vim.fn.pumvisible() == 1 and "<C-n>" or "<C-n>"
-end, { expr = true, desc = "Next completion" })
-vim.keymap.set("i", "<C-p>", function()
-  return vim.fn.pumvisible() == 1 and "<C-p>" or "<C-p>"
-end, { expr = true, desc = "Prev completion" })
-vim.keymap.set("i", "<CR>", function()
-  return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>"
-end, { expr = true, desc = "Accept completion" })
-vim.keymap.set("i", "<C-e>", function()
-  return vim.fn.pumvisible() == 1 and "<C-e>" or "<C-e>"
-end, { expr = true, desc = "Close completion" })
-
--- ── BLINK.CMP (commented out - uncomment to use) ─────────────────────────────
---[[
+-- ── 8. COMPLETION (blink.cmp — fast Rust-powered) ───────────────────────────
 local ok, blink = pcall(require, "blink.cmp")
 if ok then
   blink.setup({
     keymap = {
-      preset = "default",
-      ["<CR>"] = { "accept", "fallback" },
+      ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
       ["<C-n>"] = { "select_next", "fallback" },
       ["<C-p>"] = { "select_prev", "fallback" },
-      ["<C-y>"] = { "accept" },
-      ["<C-e>"] = { "hide", "fallback" },
+      ["<CR>"] = { "accept", "fallback" },
     },
     appearance = {
       use_nvim_cmp_as_default = true,
       nerd_font_variant = "mono",
     },
     completion = {
-      trigger = {
-        show_on_insert_on_trigger_character = true,
+      trigger = { 
+        show_on_insert_on_trigger_character = false,
+        show_in_snippet = false,
       },
       menu = {
+        auto_show = false,
         draw = {
           columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
         },
@@ -551,15 +504,16 @@ if ok then
         auto_show = true,
         auto_show_delay_ms = 200,
       },
-      ghost_text = { enabled = true },
     },
     sources = {
       default = { "lsp", "path", "buffer" },
     },
     signature = { enabled = true },
   })
+  
+  -- Set fuzzy match highlight to blue
+  vim.api.nvim_set_hl(0, "BlinkCmpLabelMatch", { fg = "#569cd6", bold = true })
 end
---]]
 
 -- ── 9. JAVA-SPECIFIC FILETYPE SETTINGS ───────────────────────────────────────
 vim.api.nvim_create_autocmd("FileType", {
@@ -634,63 +588,51 @@ map("n", "<leader>gb", function()
   end
 end, { desc = "Diff current file: current branch vs branch" })
 
--- ── MINI.PICK FUZZY FINDER ───────────────────────────────────────────────────
-local pick_ok, pick = pcall(require, "mini.pick")
-if pick_ok then
-  pick.setup({
-    window = {
-      config = {
-        relative = 'editor',
-        anchor = 'NW',
-        width = math.floor(0.8 * vim.o.columns),
-        height = math.floor(0.8 * vim.o.lines),
-        row = math.floor(0.1 * vim.o.lines),
-        col = math.floor(0.1 * vim.o.columns),
-        border = 'rounded',
-      }
-    }
+-- ── FZF-LUA FUZZY FINDER ────────────────────────────────────────────────────
+local fzf_ok, fzf = pcall(require, "fzf-lua")
+if fzf_ok then
+  fzf.setup({
+    winopts = {
+      height = 0.85,
+      width = 0.80,
+      row = 0.35,
+      col = 0.50,
+      border = "rounded",
+      preview = {
+        hidden = "hidden",
+      },
+    },
   })
   
-  map("n", "<leader>ff", "<cmd>Pick files<cr>", { desc = "Find Files" })
-  map("n", "<C-p>", "<cmd>Pick files<cr>", { desc = "Find Files" })
+  map("n", "<leader>ff", "<cmd>FzfLua files<cr>", { desc = "Find Files" })
+  map("n", "<C-p>", "<cmd>FzfLua files<cr>", { desc = "Find Files" })
   map("n", "<leader>c", function()
     local dir = vim.fn.expand("%:p:h")
-    vim.cmd("lcd " .. dir)
-    require("mini.pick").builtin.files()
+    require("fzf-lua").files({ cwd = dir })
   end, { desc = "Find Files (current file dir)" })
-  map("n", "<leader>b", "<cmd>Pick buffers<cr>", { desc = "Find Buffers" })
-  map("n", "<leader>g", "<cmd>Pick grep_live<cr>", { desc = "Live Grep" })
+  map("n", "<leader>b", "<cmd>FzfLua buffers<cr>", { desc = "Find Buffers" })
+  map("n", "<leader>g", "<cmd>FzfLua live_grep<cr>", { desc = "Live Grep" })
 else
   -- Fallback
   map("n", "<leader>ff", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
   map("n", "<C-p>", "<cmd>find **/*<Left><Left>", { desc = "Find Files" })
 end
 
--- ── MINI.FILES ───────────────────────────────────────────────────────────────
-local mf_ok, mfiles = pcall(require, "mini.files")
-if mf_ok then
-  mfiles.setup({
-    windows = {
-      preview = false,
+-- ── OIL.NVIM ────────────────────────────────────────────────────────────────
+local oil_ok, oil = pcall(require, "oil")
+if oil_ok then
+  oil.setup({
+    view_options = {
+      show_hidden = false,
+    },
+    float = {
+      padding = 2,
+      max_width = 90,
+      max_height = 30,
+      border = "rounded",
     },
   })
-  vim.api.nvim_create_autocmd("User", {
-    pattern = "MiniFilesBufferCreate",
-    callback = function(args)
-      vim.keymap.set("n", "<CR>", function()
-        local entry = mfiles.get_fs_entry()
-        if entry and entry.fs_type == "file" then
-          mfiles.close()
-          vim.cmd("edit " .. vim.fn.fnameescape(entry.path))
-        end
-      end, { buffer = args.data.buf_id })
-    end,
-  })
-  map("n", "<leader>e", function()
-    if not mfiles.close() then
-      mfiles.open(vim.fn.expand("%:p:h"))
-    end
-  end, { desc = "File explorer" })
+  map("n", "<leader>e", "<cmd>Oil --float<cr>", { desc = "File explorer" })
 end
 
 -- ── 11. STATUSLINE (minimal, no plugin needed) ───────────────────────────────
