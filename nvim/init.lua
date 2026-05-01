@@ -59,6 +59,12 @@ opt.breakindent    = true
 opt.undofile       = true
 opt.undolevels     = 10000
 
+vim.api.nvim_create_autocmd("FileType", { pattern = "markdown",
+    callback = function()
+        vim.opt_local.conceallevel = 2
+    end
+})
+
 -- Cursor
 opt.guicursor = "a:blinkwait0-blinkoff0-blinkon0,n-v-c-sm:block,i-ci-ve:ver25,r-cr-o:hor20"
 
