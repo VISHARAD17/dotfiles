@@ -22,7 +22,7 @@ if ok then
       menu = {
         auto_show = false,
         draw = {
-          columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+          columns = { { "label", "label_description", gap = 1 }, { "kind" } },
         },
       },
       documentation = {
@@ -50,5 +50,6 @@ end
 ## Features
 - Manual trigger only (no auto-popup)
 - Blue fuzzy match highlighting
+- No icons (clean text-only display)
 - LSP, path, and buffer sources
 - Signature help enabled

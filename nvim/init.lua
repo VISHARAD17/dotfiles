@@ -497,7 +497,7 @@ if ok then
       menu = {
         auto_show = false,
         draw = {
-          columns = { { "label", "label_description", gap = 1 }, { "kind_icon", "kind" } },
+          columns = { { "label", "label_description", gap = 1 }, { "kind" } },
         },
       },
       documentation = {
