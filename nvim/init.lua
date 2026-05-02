@@ -638,7 +638,13 @@ if oil_ok then
       border = "rounded",
     },
   })
-  map("n", "<leader>e", "<cmd>Oil --float<cr>", { desc = "File explorer" })
+  map("n", "<leader>e", function()
+    if require("oil").get_current_dir() then
+      vim.cmd("close")
+    else
+      vim.cmd("Oil --float")
+    end
+  end, { desc = "File explorer" })
 end
 
 -- ── 11. STATUSLINE (minimal, no plugin needed) ───────────────────────────────

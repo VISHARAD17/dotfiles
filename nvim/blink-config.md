@@ -47,6 +47,7 @@ end
 - `<C-p>`: Previous item
 - `<CR>`: Accept completion
 
+
 ## Features
 - Manual trigger only (no auto-popup)
 - Blue fuzzy match highlighting
